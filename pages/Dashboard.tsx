@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Calendar, CreditCard, Video, Clock, CheckCircle, ChevronRight, Bell } from 'lucide-react';
-import { MOCK_USER, CLASSES, TUITION_ITEMS, EVENTS, REHEARSAL_VIDEOS } from '../constants';
-import { User, ClassSession } from '../types';
+import { Calendar, CreditCard, Video, Clock, CheckCircle, Bell } from 'lucide-react';
+import { CLASSES, TUITION_ITEMS, EVENTS, REHEARSAL_VIDEOS } from '../constants';
+import { User } from '../types';
 
 interface DashboardProps {
   user: User;

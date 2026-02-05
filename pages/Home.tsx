@@ -1,6 +1,5 @@
 import React from 'react';
-import { MapPin, ArrowRight, Star, Clock, Users, Sparkles, Music, Award, Footprints } from 'lucide-react';
-import { LOCATIONS } from '../constants';
+import { MapPin, Star, Users, Sparkles, Music, Award, Footprints } from 'lucide-react';
 
 const Home: React.FC = () => {
   return (

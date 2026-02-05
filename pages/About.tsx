@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Heart, Award, Users, GraduationCap, Globe } from 'lucide-react';
+import { Star, Award, Users, GraduationCap, Globe } from 'lucide-react';
 
 const About: React.FC = () => {
   return (
