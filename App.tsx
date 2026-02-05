@@ -6,7 +6,7 @@ import About from './pages/About';
 import ChatBot from './components/ChatBot';
 import { MOCK_USER, CLASSES, LOCATIONS, CLASS_CATEGORIES } from './constants';
 import { User, ClassSession } from './types';
-import { Footprints, Sparkles, Star, Heart, Clock, MapPin, Calendar as CalendarIcon } from 'lucide-react';
+import { Clock, MapPin, Calendar as CalendarIcon } from 'lucide-react';
 
 // --- Helper ---
 const formatTime = (time: string) => {
