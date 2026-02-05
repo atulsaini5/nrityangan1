@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Instagram, Facebook, Mail, Phone, MessageCircle, Youtube, Linkedin } from 'lucide-react';
+import { Menu, X, Instagram, Facebook, Phone, MessageCircle, Youtube, Linkedin } from 'lucide-react';
 
 // Custom hook to replace useLocation from react-router-dom
 const useHashLocation = () => {
