@@ -68,26 +68,30 @@ Deno.serve(async (request) => {
 
     if (insertError) throw insertError;
 
-    const resendApiKey = Deno.env.get('RESEND_API_KEY');
-    const fromEmail = Deno.env.get('RESEND_FROM_EMAIL');
+    const sendGridApiKey = Deno.env.get('SENDGRID_API_KEY');
     let notificationSent = false;
     let notificationError: string | null = null;
 
-    if (!resendApiKey || !fromEmail) {
-      notificationError = 'RESEND_API_KEY or RESEND_FROM_EMAIL is not configured';
+    if (!sendGridApiKey) {
+      notificationError = 'SENDGRID_API_KEY is not configured';
     } else {
-      const emailResponse = await fetch('https://api.resend.com/emails', {
+      const emailResponse = await fetch('https://api.sendgrid.com/v3/mail/send', {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${resendApiKey}`,
+          Authorization: `Bearer ${sendGridApiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: fromEmail,
-          to: ['tumam_b@yahoo.com', 'atulsnow@gmail.com'],
-          reply_to: email,
-          subject: `New trial class request — ${submission.student_name}`,
-          html: `
+          personalizations: [{
+            to: [
+              { email: 'tumam_b@yahoo.com' },
+              { email: 'atulsnow@gmail.com' },
+            ],
+          }],
+          from: { email: 'support@teamevents.ai', name: 'Nrityangan Kathak Studio' },
+          reply_to: { email },
+          subject: `New trial class request â€” ${submission.student_name}`,
+          content: [{ type: 'text/html', value: `
             <h2>New trial class request</h2>
             <table cellpadding="6" style="border-collapse:collapse">
               <tr><td><strong>Contact</strong></td><td>${escapeHtml(submission.contact_name)}</td></tr>
@@ -100,7 +104,7 @@ Deno.serve(async (request) => {
               <tr><td><strong>Notes</strong></td><td>${escapeHtml(submission.notes ?? 'None')}</td></tr>
             </table>
             <p>Request ID: ${data.id}</p>
-          `,
+          ` }],
         }),
       });
 
@@ -122,3 +126,4 @@ Deno.serve(async (request) => {
     return json({ error: 'Unable to submit the trial class request.' }, 500, headers);
   }
 });
+
