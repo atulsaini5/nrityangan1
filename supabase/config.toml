@@ -1,0 +1,2 @@
+[functions.trial-class-request]
+verify_jwt = true
