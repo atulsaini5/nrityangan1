@@ -18,3 +18,25 @@ View your app in AI Studio: https://ai.studio/apps/drive/1E9KLD8mw_FwuXbcpdq-AWU
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+
+## Trial class requests (Supabase)
+
+The **Book a Trial Class** form posts to the `trial-class-request` Supabase Edge Function. The function stores the request in `public.trial_class_requests` and sends an email notification to `tumam_b@yahoo.com` and `atulsnow@gmail.com`.
+
+1. Link the project and apply the database migration:
+   ```bash
+   supabase link --project-ref YOUR_PROJECT_REF
+   supabase db push
+   ```
+2. Configure the function secrets. `RESEND_FROM_EMAIL` must be a sender on a domain verified in Resend. Restrict `ALLOWED_ORIGINS` to the deployed site (comma-separated when needed):
+   ```bash
+   supabase secrets set RESEND_API_KEY=... RESEND_FROM_EMAIL="Nrityangan <trials@your-domain.com>" ALLOWED_ORIGINS="https://your-site.example"
+   ```
+3. Deploy the Edge Function:
+   ```bash
+   supabase functions deploy trial-class-request
+   ```
+4. Copy `.env.example` to `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+
+The `followup_completed` boolean appears as a checkbox in the Supabase table editor and defaults to unchecked. Public table access is blocked by RLS; submissions are written only by the Edge Function.
