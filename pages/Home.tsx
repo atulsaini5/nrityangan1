@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import TrialClassForm from '../components/TrialClassForm';
 import { MapPin, Star, Users, Sparkles, Music, Award, Footprints } from 'lucide-react';
+import { nrityanganImage } from '../lib/storage';
 
 const Home: React.FC = () => {
   const [isTrialFormOpen, setIsTrialFormOpen] = useState(false);
@@ -12,7 +13,7 @@ const Home: React.FC = () => {
       <div className="relative h-[80vh] w-full overflow-hidden">
         <div className="absolute inset-0">
           <img 
-            src="https://tnvyqbxtlplkkozjahmy.supabase.co/storage/v1/object/public/gallery/2026-2026/1784320042206_2.jpeg" 
+            src={nrityanganImage('stageold.avif')} 
             alt="Kathak Dancer" 
             className="w-full h-full object-cover"
           />
