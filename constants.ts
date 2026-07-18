@@ -1,4 +1,5 @@
 import { Location, ClassSession, User, Video, TuitionItem, CalendarEvent, ClassCategory } from './types';
+import { nrityanganImage } from './lib/storage';
 
 export const LOCATIONS: Location[] = [
   {
@@ -179,7 +180,7 @@ export const CLASS_CATEGORIES: ClassCategory[] = [
     id: 'begin-kids',
     title: "Kathak Beginner Kids",
     age: "Ages 5-12",
-    image: "https://picsum.photos/seed/kathak_begin/800/600",
+    image: nrityanganImage('Begineer-Kids.jpg'),
     description: "A foundational journey into Kathak focusing on rhythm, posture, hand movements, and basic spins, progressing to extended tatkaar, simple compositions like todas, parans, and amad.",
     match: { title: 'Kathak Beginner Kids', ageGroup: '5-12' }
   },
@@ -187,7 +188,7 @@ export const CLASS_CATEGORIES: ClassCategory[] = [
     id: 'begin-teen-adult',
     title: "Kathak Beginner Teen/Adult",
     age: "Teen & Adult",
-    image: "https://picsum.photos/seed/kathak_adult/800/600",
+    image: nrityanganImage('Begineer-Adult-Teen.png'),
     description: "Embark on your Kathak dance journey with our beginner classes, carefully crafted to introduce you to the foundational movements and rhythmic patterns of this captivating dance form. Multiple weekly slots available.",
     match: { title: 'Kathak Beginner Teen/Adult' }
   },
@@ -195,7 +196,7 @@ export const CLASS_CATEGORIES: ClassCategory[] = [
     id: 'inter-kids-teen',
     title: "Kathak Intermediate Kids/Teen",
     age: "Kids & Teens",
-    image: "https://picsum.photos/seed/kathak_inter/800/600",
+    image: nrityanganImage('Int-kids-teen.png'),
     description: "Deepen your Kathak practice with refined footwork, expressive abhinaya, and complex compositions. This class bridges the gap between foundational skills and advanced performance techniques.",
     match: { title: 'Kathak Intermediate Kids/Teen' }
   },
@@ -203,7 +204,7 @@ export const CLASS_CATEGORIES: ClassCategory[] = [
     id: 'inter-adv-teen-adult',
     title: "Kathak Inter-Adv Teen/Adult",
     age: "Teen & Adult",
-    image: "https://picsum.photos/seed/kathak_youth/800/600",
+    image: nrityanganImage('Inter-AdvTeenAdult.png'),
     description: "Designed for serious practitioners to strengthen technique, rhythm, and expression. Explore complex footwork patterns, graceful spins, and abhinaya at our Sri Balaji Temple location.",
     match: { title: 'Kathak Intermediate-Advanced Teen/Adult' }
   },
@@ -211,7 +212,7 @@ export const CLASS_CATEGORIES: ClassCategory[] = [
     id: 'mixed',
     title: "Mom & Me / Senior",
     age: "Mixed Ages",
-    image: "https://picsum.photos/seed/kathak_mom/800/600",
+    image: nrityanganImage('Momandme.png'),
     description: "A special class designed for mothers and daughters to learn Kathak together - creating cherished memories through rhythm, grace, and movement. Also a welcoming space for seniors.",
     match: { title: 'Mom & Me / Senior Kathak' }
   }

@@ -3,6 +3,7 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import About from './pages/About';
+import Gallery from './pages/Gallery';
 import ChatBot from './components/ChatBot';
 import { MOCK_USER, CLASSES, LOCATIONS, CLASS_CATEGORIES } from './constants';
 import { User, ClassSession } from './types';
@@ -199,6 +200,9 @@ const App: React.FC = () => {
       break;
     case '/about':
       content = <About />;
+      break;
+    case '/gallery':
+      content = <Gallery />;
       break;
     case '/dashboard':
       content = user ? <Dashboard user={user} /> : <Home />;

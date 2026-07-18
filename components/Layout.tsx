@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Instagram, Facebook, Phone, MessageCircle, Youtube, Linkedin } from 'lucide-react';
+import { nrityanganImage } from '../lib/storage';
 
 // Custom hook to replace useLocation from react-router-dom
 const useHashLocation = () => {
@@ -46,7 +47,7 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
           <div className="flex justify-between h-20 items-center">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-rose-500 rounded-full flex items-center justify-center text-white font-serif font-bold text-xl">N</div>
+              <img src={nrityanganImage('Nrityangan Logo.jpg')} alt="Nrityangan" className="h-12 w-12 rounded-full object-cover" />
               <span className="font-serif text-2xl font-bold tracking-tight text-slate-900">Nrityangan<span className="text-rose-500">.</span></span>
             </Link>
 
@@ -54,6 +55,7 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
             <div className="hidden md:flex items-center space-x-8">
               <Link to="/" className={isActive('/')}>Home</Link>
               <Link to="/classes" className={isActive('/classes')}>Classes</Link>
+              <Link to="/gallery" className={isActive('/gallery')}>Gallery</Link>
               <Link to="/about" className={isActive('/about')}>About</Link>
               {isLoggedIn && (
                 <>
@@ -97,6 +99,7 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
             <div className="px-4 pt-2 pb-6 space-y-2 flex flex-col">
               <Link to="/" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">Home</Link>
               <Link to="/classes" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">Classes</Link>
+              <Link to="/gallery" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">Gallery</Link>
               <Link to="/about" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">About</Link>
               {isLoggedIn && (
                  <>
@@ -181,7 +184,7 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
               <h3 className="text-lg font-semibold mb-4 text-rose-400">Quick Links</h3>
               <ul className="space-y-2 text-slate-300 text-sm">
                 <li><Link to="/classes" className="hover:text-white">Our Offerings</Link></li>
-                <li><Link to="/schedule" className="hover:text-white">Schedule</Link></li>
+                <li><Link to="/gallery" className="hover:text-white">Gallery</Link></li>
                 <li><Link to="/about" className="hover:text-white">About Us</Link></li>
               </ul>
             </div>

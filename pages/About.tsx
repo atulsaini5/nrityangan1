@@ -1,5 +1,6 @@
 import React from 'react';
-import { Star, Award, Users, GraduationCap, Globe } from 'lucide-react';
+import { Star, Award, Users, Globe } from 'lucide-react';
+import { nrityanganImage } from '../lib/storage';
 
 const About: React.FC = () => {
   return (
@@ -7,7 +8,7 @@ const About: React.FC = () => {
       {/* Hero Section */}
       <div className="relative py-24 bg-slate-900 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-             <img src="https://picsum.photos/seed/kathak_about_bg/1920/600" alt="Background" className="w-full h-full object-cover" />
+             <img src={nrityanganImage('stage.png')} alt="Kathak performance" className="w-full h-full object-cover" />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <h1 className="font-serif text-4xl md:text-6xl font-bold text-white mb-6">About Nrityangan</h1>
@@ -33,7 +34,7 @@ const About: React.FC = () => {
             <div className="relative order-2 md:order-1">
                <div className="absolute -inset-4 bg-white rounded-2xl transform -rotate-2 shadow-lg"></div>
                <img 
-                 src="https://picsum.photos/seed/kathak_mission_new/600/800" 
+                 src={nrityanganImage('Int-Teen-Adult.png')} 
                  alt="Classroom" 
                  className="relative rounded-2xl shadow-xl w-full h-96 object-cover"
                />
@@ -61,7 +62,7 @@ const About: React.FC = () => {
             </div>
             <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center">
               <div className="bg-white/10 p-6 rounded-2xl backdrop-blur-sm border border-white/20">
-                <GraduationCap size={48} className="text-rose-400" />
+                <img src={nrityanganImage('ham.png')} alt="Hindusthan Art & Music Society" className="h-16 w-16 object-contain" />
               </div>
               <div>
                 <h3 className="font-serif text-2xl font-bold mb-4">Our Affiliation</h3>
@@ -92,7 +93,7 @@ const About: React.FC = () => {
            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden flex flex-col lg:flex-row">
              <div className="lg:w-2/5 relative min-h-[400px]">
                <img 
-                src="https://picsum.photos/seed/chandrayee/800/1000" 
+                src={nrityanganImage('Chandrayee.jpeg')} 
                 alt="Chandrayee Bhattacharyya" 
                 className="absolute inset-0 w-full h-full object-cover" 
                />
