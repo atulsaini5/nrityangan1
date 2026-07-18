@@ -15,8 +15,7 @@ View your app in AI Studio: https://ai.studio/apps/drive/1E9KLD8mw_FwuXbcpdq-AWU
 
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
+2. Run the app:
    `npm run dev`
 
 
@@ -40,4 +39,5 @@ The **Book a Trial Class** form posts to the `trial-class-request` Supabase Edge
 4. Copy `.env.example` to `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
 
 The `followup_completed` boolean appears as a checkbox in the Supabase table editor and defaults to unchecked. Public table access is blocked by RLS; submissions are written only by the Edge Function.
+
 
