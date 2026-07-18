@@ -4,7 +4,6 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import About from './pages/About';
 import Gallery from './pages/Gallery';
-import ChatBot from './components/ChatBot';
 import { MOCK_USER, CLASSES, LOCATIONS, CLASS_CATEGORIES } from './constants';
 import { User, ClassSession } from './types';
 import { Clock, MapPin, Calendar as CalendarIcon } from 'lucide-react';
@@ -224,7 +223,6 @@ const App: React.FC = () => {
   return (
     <Layout isLoggedIn={!!user} onLogin={handleLogin} onLogout={handleLogout}>
       {content}
-      <ChatBot />
     </Layout>
   );
 };
