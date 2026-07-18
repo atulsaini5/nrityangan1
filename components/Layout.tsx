@@ -189,7 +189,7 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-slate-800 text-center text-slate-500 text-sm">
-            Â© {new Date().getFullYear()} Nrityangan Kathak Studio. All rights reserved.
+            © {new Date().getFullYear()} Nrityangan Kathak Studio. All rights reserved.
           </div>
         </div>
       </footer>
@@ -198,4 +198,3 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
 };
 
 export default Layout;
-
