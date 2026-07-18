@@ -138,7 +138,7 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
                   <a href="https://www.instagram.com/nrityangankathak3/" target="_blank" rel="noopener noreferrer" className="hover:text-rose-600 transition-colors"><Instagram size={16} /></a>
                   <a href="https://www.facebook.com/profile.php?id=100049048404597" target="_blank" rel="noopener noreferrer" className="hover:text-rose-600 transition-colors"><Facebook size={16} /></a>
                   <a href="https://www.linkedin.com/in/chandrayee-bhattacharyya-09b089300/" target="_blank" rel="noopener noreferrer" className="hover:text-rose-600 transition-colors"><Linkedin size={16} /></a>
-                  <a href="#" className="hover:text-rose-600 transition-colors"><Youtube size={16} /></a>
+                  <a href="https://www.youtube.com/@kathakseattle" target="_blank" rel="noopener noreferrer" className="hover:text-rose-600 transition-colors" aria-label="Nrityangan on YouTube"><Youtube size={16} /></a>
               </div>
            </div>
         </div>
