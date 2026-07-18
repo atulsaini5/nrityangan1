@@ -12,7 +12,7 @@ const Home: React.FC = () => {
       <div className="relative h-[80vh] w-full overflow-hidden">
         <div className="absolute inset-0">
           <img 
-            src="https://melabijtdzmsjqzewsjw.supabase.co/storage/v1/object/public/nrityangan/stage.avif" 
+            src="https://tnvyqbxtlplkkozjahmy.supabase.co/storage/v1/object/public/gallery/2026-2026/1784320042206_2.jpeg" 
             alt="Kathak Dancer" 
             className="w-full h-full object-cover"
           />
