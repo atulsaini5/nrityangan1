@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Instagram, Facebook, Phone, MessageCircle, Youtube, Linkedin } from 'lucide-react';
+import { nrityanganImage } from '../lib/storage';
 
 // Custom hook to replace useLocation from react-router-dom
 const useHashLocation = () => {
@@ -46,7 +47,7 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
           <div className="flex justify-between h-20 items-center">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-rose-500 rounded-full flex items-center justify-center text-white font-serif font-bold text-xl">N</div>
+              <img src={nrityanganImage('Nrityangan Logo.jpg')} alt="Nrityangan" className="h-12 w-12 rounded-full object-cover" />
               <span className="font-serif text-2xl font-bold tracking-tight text-slate-900">Nrityangan<span className="text-rose-500">.</span></span>
             </Link>
 
