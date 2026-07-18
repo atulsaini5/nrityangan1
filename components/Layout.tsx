@@ -54,6 +54,7 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
             <div className="hidden md:flex items-center space-x-8">
               <Link to="/" className={isActive('/')}>Home</Link>
               <Link to="/classes" className={isActive('/classes')}>Classes</Link>
+              <Link to="/gallery" className={isActive('/gallery')}>Gallery</Link>
               <Link to="/about" className={isActive('/about')}>About</Link>
               {isLoggedIn && (
                 <>
@@ -97,6 +98,7 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
             <div className="px-4 pt-2 pb-6 space-y-2 flex flex-col">
               <Link to="/" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">Home</Link>
               <Link to="/classes" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">Classes</Link>
+              <Link to="/gallery" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">Gallery</Link>
               <Link to="/about" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">About</Link>
               {isLoggedIn && (
                  <>
@@ -181,13 +183,13 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
               <h3 className="text-lg font-semibold mb-4 text-rose-400">Quick Links</h3>
               <ul className="space-y-2 text-slate-300 text-sm">
                 <li><Link to="/classes" className="hover:text-white">Our Offerings</Link></li>
-                <li><Link to="/schedule" className="hover:text-white">Schedule</Link></li>
+                <li><Link to="/gallery" className="hover:text-white">Gallery</Link></li>
                 <li><Link to="/about" className="hover:text-white">About Us</Link></li>
               </ul>
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-slate-800 text-center text-slate-500 text-sm">
-            © {new Date().getFullYear()} Nrityangan Kathak Studio. All rights reserved.
+            Â© {new Date().getFullYear()} Nrityangan Kathak Studio. All rights reserved.
           </div>
         </div>
       </footer>
@@ -196,3 +198,4 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
 };
 
 export default Layout;
+
