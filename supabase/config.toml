@@ -3,3 +3,6 @@ verify_jwt = true
 
 [functions.admin-portal]
 verify_jwt = false
+
+[functions.youtube-videos]
+verify_jwt = false
