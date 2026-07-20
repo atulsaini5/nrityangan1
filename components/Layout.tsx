@@ -175,7 +175,7 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
               <h3 className="text-lg font-semibold mb-4 text-rose-400">Locations</h3>
               <ul className="space-y-2 text-slate-300 text-sm">
                 <li>Samena Club, Bellevue</li>
-                <li>Ada Studio, Redmond</li>
+                <li>SaiBaba Temple, Redmond</li>
                 <li>Sri Balaji Temple, Bellevue</li>
               </ul>
             </div>

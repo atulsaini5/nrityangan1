@@ -10,7 +10,7 @@ export const LOCATIONS: Location[] = [
   },
   {
     id: 'loc2',
-    name: 'Ada Studio',
+    name: 'SaiBaba Temple',
     address: '16126 NE 87th St, Redmond, WA 98052',
     image: 'https://picsum.photos/seed/ada_loc/800/600',
   },
@@ -30,7 +30,7 @@ export const CLASSES: ClassSession[] = [
     id: 'c1_1', 
     title: 'Kathak Beginner Kids', 
     instructor: 'Chandrayee Bhattacharyya', 
-    locationId: 'loc2', // Ada
+    locationId: 'loc2', // SaiBaba Temple
     dayOfWeek: 'Monday', 
     startTime: '17:15', 
     durationMinutes: 45, 
@@ -52,12 +52,12 @@ export const CLASSES: ClassSession[] = [
   },
 
   // 2) Kathak Beginner Teen/Adult (Formerly Kathak Beginner Adult)
-  // Schedule: Ada Mon 4:30pm-5:15pm, Samena Fri 6-7pm, Samena Sun 11am-12noon
+  // Schedule: SaiBaba Temple Mon 4:30pm-5:15pm, Samena Fri 6-7pm, Samena Sun 11am-12noon
   { 
     id: 'c_beg_ta_1', 
     title: 'Kathak Beginner Teen/Adult', 
     instructor: 'Chandrayee Bhattacharyya', 
-    locationId: 'loc2', // Ada
+    locationId: 'loc2', // SaiBaba Temple
     dayOfWeek: 'Monday', 
     startTime: '16:30', 
     durationMinutes: 45, 
