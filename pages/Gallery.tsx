@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ChevronLeft, ChevronRight, Image as ImageIcon, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink, Image as ImageIcon, Play, X, Youtube } from 'lucide-react';
 
 type StorageObject = { name: string; id?: string | null; metadata?: { mimetype?: string } | null };
 type GalleryImage = { name: string; url: string };
 type GalleryCollection = { name: string; title: string; images: GalleryImage[] };
+type YouTubeVideo = { id: string; title: string; publishedAt: string; thumbnail: string; url: string };
 
 const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL || '').replace(/\/$/, '');
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
@@ -35,6 +36,10 @@ const Gallery: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedUrl, setSelectedUrl] = useState<string | null>(null);
+  const [tab, setTab] = useState<'photos' | 'videos'>('photos');
+  const [videos, setVideos] = useState<YouTubeVideo[]>([]);
+  const [videoLoading, setVideoLoading] = useState(false);
+  const [videoError, setVideoError] = useState('');
 
   useEffect(() => {
     let cancelled = false;
@@ -71,6 +76,25 @@ const Gallery: React.FC = () => {
     return () => { cancelled = true; };
   }, []);
 
+  useEffect(() => {
+    if (tab !== 'videos' || videos.length || videoLoading) return;
+    const loadVideos = async () => {
+      setVideoLoading(true);
+      setVideoError('');
+      try {
+        const response = await fetch(`${supabaseUrl}/functions/v1/youtube-videos`);
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Unable to load videos');
+        setVideos(result.videos ?? []);
+      } catch (err) {
+        setVideoError(err instanceof Error ? err.message : 'Unable to load videos');
+      } finally {
+        setVideoLoading(false);
+      }
+    };
+    loadVideos();
+  }, [tab, videos.length, videoLoading]);
+
   const allImages = useMemo(() => collections.flatMap(collection => collection.images), [collections]);
   const selectedIndex = selectedUrl ? allImages.findIndex(image => image.url === selectedUrl) : -1;
 
@@ -103,11 +127,17 @@ const Gallery: React.FC = () => {
       </section>
 
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        {loading && <p className="py-20 text-center text-slate-500">Loading galleryâ€¦</p>}
+        <div className="mb-10 flex justify-center">
+          <div className="inline-flex rounded-full border border-slate-200 bg-white p-1 shadow-sm">
+            <button onClick={() => setTab('photos')} className={`flex items-center gap-2 rounded-full px-6 py-3 font-medium transition ${tab === 'photos' ? 'bg-rose-600 text-white shadow' : 'text-slate-600 hover:text-rose-600'}`}><ImageIcon size={18}/> Photos</button>
+            <button onClick={() => setTab('videos')} className={`flex items-center gap-2 rounded-full px-6 py-3 font-medium transition ${tab === 'videos' ? 'bg-red-600 text-white shadow' : 'text-slate-600 hover:text-red-600'}`}><Youtube size={19}/> Videos</button>
+          </div>
+        </div>
+        {loading && <p className="py-20 text-center text-slate-500">Loading galleryÃ¢â‚¬Â¦</p>}
         {error && <p className="rounded-xl border border-rose-200 bg-rose-50 p-6 text-center text-rose-700">{error}</p>}
         {!loading && !error && collections.length === 0 && <p className="py-20 text-center text-slate-500">No gallery photos are available yet.</p>}
 
-        <div className="space-y-14">
+        {tab === 'photos' && <div className="space-y-14">
           {collections.map(collection => (
             <section key={collection.name}>
               <div className="mb-6 flex items-end justify-between border-b border-rose-200 pb-3">
@@ -123,7 +153,26 @@ const Gallery: React.FC = () => {
               </div>
             </section>
           ))}
-        </div>
+        </div>}
+
+        {tab === 'videos' && <section>
+          <div className="mb-7 flex flex-wrap items-center justify-between gap-4">
+            <div><h2 className="font-serif text-2xl font-bold text-slate-900">YouTube Videos</h2><p className="mt-1 text-slate-500">All public uploads from Nrityangan Kathak Studio.</p></div>
+            <a href="https://www.youtube.com/@kathakseattle" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-red-600 px-5 py-2.5 font-semibold text-white hover:bg-red-700">Visit channel <ExternalLink size={16}/></a>
+          </div>
+          {videoLoading && <p className="py-20 text-center text-slate-500">Loading YouTube videosâ€¦</p>}
+          {videoError && <p className="rounded-xl border border-red-200 bg-red-50 p-6 text-center text-red-700">{videoError}</p>}
+          {!videoLoading && !videoError && !videos.length && <p className="py-20 text-center text-slate-500">No public videos are available yet.</p>}
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {videos.map((video) => <a key={video.id} href={video.url} target="_blank" rel="noopener noreferrer" className="group overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+              <div className="relative aspect-video overflow-hidden bg-slate-200">
+                <img src={video.thumbnail} alt={video.title} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-105"/>
+                <span className="absolute inset-0 flex items-center justify-center bg-black/10 transition group-hover:bg-black/25"><span className="rounded-full bg-red-600 p-4 text-white shadow-lg"><Play size={24} fill="currentColor"/></span></span>
+              </div>
+              <div className="p-5"><h3 className="line-clamp-2 font-semibold text-slate-900">{video.title}</h3><p className="mt-2 text-sm text-slate-500">{video.publishedAt ? new Date(video.publishedAt).toLocaleDateString() : 'Watch on YouTube'}</p></div>
+            </a>)}
+          </div>
+        </section>}
       </div>
 
       {selectedUrl && (
@@ -139,4 +188,5 @@ const Gallery: React.FC = () => {
 };
 
 export default Gallery;
+
 
