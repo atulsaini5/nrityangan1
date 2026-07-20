@@ -1,2 +1,5 @@
 [functions.trial-class-request]
 verify_jwt = true
+
+[functions.admin-portal]
+verify_jwt = false
