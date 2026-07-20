@@ -106,12 +106,12 @@ export const CLASSES: ClassSession[] = [
   },
 
   // 4) Kathak Intermediate-Advanced Teen/Adult (Formerly Kathak Intermediate Youth)
-  // Schedule: Sri Balaji Wednesdays 6-7pm and Sundays 10-11am
+  // Schedule: Samena Club Wednesdays 6-7pm and Sundays 10-11am
   { 
     id: 'c_int_adv_1', 
     title: 'Kathak Intermediate-Advanced Teen/Adult', 
     instructor: 'Chandrayee Bhattacharyya', 
-    locationId: 'loc3', // Sri Balaji
+    locationId: 'loc1', // Samena Club
     dayOfWeek: 'Wednesday', 
     startTime: '18:00', 
     durationMinutes: 60, 
@@ -123,7 +123,7 @@ export const CLASSES: ClassSession[] = [
     id: 'c_int_adv_2', 
     title: 'Kathak Intermediate-Advanced Teen/Adult', 
     instructor: 'Chandrayee Bhattacharyya', 
-    locationId: 'loc3', // Sri Balaji
+    locationId: 'loc1', // Samena Club
     dayOfWeek: 'Sunday', 
     startTime: '10:00', 
     durationMinutes: 60, 
@@ -205,7 +205,7 @@ export const CLASS_CATEGORIES: ClassCategory[] = [
     title: "Kathak Inter-Adv Teen/Adult",
     age: "Teen & Adult",
     image: nrityanganImage('Inter-AdvTeenAdult.png'),
-    description: "Designed for serious practitioners to strengthen technique, rhythm, and expression. Explore complex footwork patterns, graceful spins, and abhinaya at our Sri Balaji Temple location.",
+    description: "Designed for serious practitioners to strengthen technique, rhythm, and expression. Explore complex footwork patterns, graceful spins, and abhinaya at our Samena Club location.",
     match: { title: 'Kathak Intermediate-Advanced Teen/Adult' }
   },
   {
