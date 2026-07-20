@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import About from './pages/About';
 import Gallery from './pages/Gallery';
+import Admin from './pages/Admin';
 import { MOCK_USER, CLASSES, LOCATIONS, CLASS_CATEGORIES } from './constants';
 import { User, ClassSession } from './types';
 import { Clock, MapPin, Calendar as CalendarIcon } from 'lucide-react';
@@ -165,9 +166,12 @@ const ClassesPage = () => {
 
 // Custom Hook for Hash-based routing
 const useHashLocation = () => {
-  const [loc, setLoc] = useState(window.location.hash.replace(/^#/, '') || '/');
+  const getLocation = () => window.location.pathname === '/admin'
+    ? '/admin'
+    : window.location.hash.replace(/^#/, '') || '/';
+  const [loc, setLoc] = useState(getLocation);
   useEffect(() => {
-    const handler = () => setLoc(window.location.hash.replace(/^#/, '') || '/');
+    const handler = () => setLoc(getLocation());
     window.addEventListener('hashchange', handler);
     return () => window.removeEventListener('hashchange', handler);
   }, []);
@@ -187,6 +191,8 @@ const App: React.FC = () => {
     setUser(null);
     window.location.hash = '/';
   };
+
+  if (currentPath === '/admin') return <Admin />;
 
   // Basic Routing Logic without react-router-dom
   let content;
