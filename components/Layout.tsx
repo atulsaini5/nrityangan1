@@ -4,9 +4,11 @@ import { nrityanganImage } from '../lib/storage';
 
 // Custom hook to replace useLocation from react-router-dom
 const useHashLocation = () => {
-  const [loc, setLoc] = useState(window.location.hash.replace(/^#/, '') || '/');
+  const indexedPaths = ['/kids-kathak-bellevue', '/kathak-classes-redmond', '/adult-kathak-bellevue', '/trial-class'];
+  const getLocation = () => indexedPaths.includes(window.location.pathname) ? window.location.pathname : window.location.hash.replace(/^#/, '') || '/';
+  const [loc, setLoc] = useState(getLocation);
   useEffect(() => {
-    const handler = () => setLoc(window.location.hash.replace(/^#/, '') || '/');
+    const handler = () => setLoc(getLocation());
     window.addEventListener('hashchange', handler);
     return () => window.removeEventListener('hashchange', handler);
   }, []);
@@ -17,7 +19,7 @@ const useHashLocation = () => {
 const Link = ({ to, children, className, onClick }: { to: string; children: React.ReactNode; className?: string; onClick?: () => void }) => {
   return (
     <a 
-      href={`#${to}`} 
+      href={to === '/' ? '/' : `/#${to}`}
       className={className} 
       onClick={onClick}
     >
@@ -186,7 +188,16 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
                 <li><Link to="/classes" className="hover:text-white">Our Offerings</Link></li>
                 <li><Link to="/gallery" className="hover:text-white">Gallery</Link></li>
                 <li><Link to="/about" className="hover:text-white">About Us</Link></li>
+                <li><a href="/trial-class" className="hover:text-white">Book a Trial Class</a></li>
               </ul>
+            </div>
+            <div className="md:col-span-3 border-t border-slate-800 pt-6">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Explore Kathak classes near you</p>
+              <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-slate-300 md:justify-start">
+                <a href="/kids-kathak-bellevue" className="hover:text-white">Kids Kathak in Bellevue</a>
+                <a href="/kathak-classes-redmond" className="hover:text-white">Kathak Classes in Redmond</a>
+                <a href="/adult-kathak-bellevue" className="hover:text-white">Adult Kathak in Bellevue</a>
+              </div>
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-slate-800 text-center text-slate-500 text-sm">

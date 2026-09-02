@@ -3,8 +3,9 @@ import { CheckCircle2, Loader2, X } from 'lucide-react';
 import { CLASS_CATEGORIES, LOCATIONS } from '../constants';
 
 interface TrialClassFormProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
+  mode?: 'modal' | 'inline';
 }
 
 interface TrialFormData {
@@ -29,12 +30,14 @@ const initialFormData: TrialFormData = {
   notes: '',
 };
 
-const TrialClassForm: React.FC<TrialClassFormProps> = ({ isOpen, onClose }) => {
+const TrialClassForm: React.FC<TrialClassFormProps> = ({ isOpen = true, onClose = () => undefined, mode = 'modal' }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
   if (!isOpen) return null;
+
+  const isModal = mode === 'modal';
 
   const handleClose = () => {
     if (status !== 'submitting') {
@@ -100,23 +103,23 @@ const TrialClassForm: React.FC<TrialClassFormProps> = ({ isOpen, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm"
-      role="dialog"
-      aria-modal="true"
+      className={isModal ? 'fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm' : 'w-full'}
+      role={isModal ? 'dialog' : undefined}
+      aria-modal={isModal ? true : undefined}
       aria-labelledby="trial-form-title"
       onMouseDown={(event) => {
-        if (event.target === event.currentTarget) handleClose();
+        if (isModal && event.target === event.currentTarget) handleClose();
       }}
     >
-      <div className="relative max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white shadow-2xl">
-        <button
+      <div className={isModal ? 'relative max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white shadow-2xl' : 'relative w-full overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-slate-200'}>
+        {isModal && <button
           type="button"
           onClick={handleClose}
           className="absolute right-4 top-4 z-10 rounded-full bg-white/90 p-2 text-slate-500 shadow-sm hover:text-rose-600"
           aria-label="Close trial class form"
         >
           <X size={22} />
-        </button>
+        </button>}
 
         <div className="bg-gradient-to-r from-rose-600 to-rose-500 px-6 py-8 text-white sm:px-10">
           <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-rose-100">Your first step</p>
@@ -131,9 +134,9 @@ const TrialClassForm: React.FC<TrialClassFormProps> = ({ isOpen, onClose }) => {
             <p className="mx-auto mt-3 max-w-md text-slate-600">
               Thank you. Our team has been notified and will follow up with trial class details.
             </p>
-            <button type="button" onClick={handleClose} className="mt-8 rounded-full bg-rose-600 px-8 py-3 font-medium text-white hover:bg-rose-700">
+            {isModal && <button type="button" onClick={handleClose} className="mt-8 rounded-full bg-rose-600 px-8 py-3 font-medium text-white hover:bg-rose-700">
               Done
-            </button>
+            </button>}
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="grid gap-5 px-6 py-8 sm:grid-cols-2 sm:px-10">

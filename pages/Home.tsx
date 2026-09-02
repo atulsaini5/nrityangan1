@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
-import TrialClassForm from '../components/TrialClassForm';
+import React from 'react';
 import { MapPin, Star, Users, Sparkles, Music, Award, Footprints } from 'lucide-react';
 import { nrityanganImage } from '../lib/storage';
 
 const Home: React.FC = () => {
-  const [isTrialFormOpen, setIsTrialFormOpen] = useState(false);
-
   return (
     <>
     <div className="flex flex-col gap-0">
@@ -29,9 +26,9 @@ const Home: React.FC = () => {
               Experience the ancient art of Kathak. Nrityangan Kathak Studio preserves tradition while inspiring the next generation of artists.
             </p>
             <div className="flex gap-4 animate-in slide-in-from-left duration-700 delay-300">
-              <button type="button" onClick={() => setIsTrialFormOpen(true)} className="bg-rose-600 hover:bg-rose-700 text-white px-8 py-3 rounded-full font-medium transition-all transform hover:scale-105 shadow-lg inline-flex items-center justify-center">
+              <a href="/trial-class" className="bg-rose-600 hover:bg-rose-700 text-white px-8 py-3 rounded-full font-medium transition-all transform hover:scale-105 shadow-lg inline-flex items-center justify-center">
                 Book a Trial Class
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -150,7 +147,6 @@ const Home: React.FC = () => {
         </div>
       </section>
     </div>
-      <TrialClassForm isOpen={isTrialFormOpen} onClose={() => setIsTrialFormOpen(false)} />
     </>
   );
 };
