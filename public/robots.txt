@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kathakseattle.com/sitemap.xml
+Sitemap: https://www.kathakseattle.com/sitemap.xml
