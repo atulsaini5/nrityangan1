@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import About from './pages/About';
 import Gallery from './pages/Gallery';
+import LandingPage from './pages/LandingPage';
 import Admin from './pages/Admin';
 import { MOCK_USER, CLASSES, LOCATIONS, CLASS_CATEGORIES } from './constants';
 import { User, ClassSession } from './types';
@@ -166,8 +167,9 @@ const ClassesPage = () => {
 
 // Custom Hook for Hash-based routing
 const useHashLocation = () => {
-  const getLocation = () => window.location.pathname === '/admin'
-    ? '/admin'
+  const indexedPaths = ['/admin', '/kids-kathak-bellevue', '/kathak-classes-redmond', '/adult-kathak-bellevue', '/trial-class'];
+  const getLocation = () => indexedPaths.includes(window.location.pathname)
+    ? window.location.pathname
     : window.location.hash.replace(/^#/, '') || '/';
   const [loc, setLoc] = useState(getLocation);
   useEffect(() => {
@@ -208,6 +210,18 @@ const App: React.FC = () => {
       break;
     case '/gallery':
       content = <Gallery />;
+      break;
+    case '/kids-kathak-bellevue':
+      content = <LandingPage kind="kids-bellevue" />;
+      break;
+    case '/kathak-classes-redmond':
+      content = <LandingPage kind="redmond" />;
+      break;
+    case '/adult-kathak-bellevue':
+      content = <LandingPage kind="adult-bellevue" />;
+      break;
+    case '/trial-class':
+      content = <LandingPage kind="trial" />;
       break;
     case '/dashboard':
       content = user ? <Dashboard user={user} /> : <Home />;
