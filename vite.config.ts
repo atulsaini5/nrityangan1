@@ -14,6 +14,7 @@ export default defineConfig({
         kathakClassesRedmond: `${projectRoot}kathak-classes-redmond/index.html`,
         adultKathakBellevue: `${projectRoot}adult-kathak-bellevue/index.html`,
         trialClass: `${projectRoot}trial-class/index.html`,
+        trialClassThankYou: `${projectRoot}trial-class/thank-you/index.html`,
       },
     },
   },

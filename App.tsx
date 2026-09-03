@@ -167,7 +167,7 @@ const ClassesPage = () => {
 
 // Custom Hook for Hash-based routing
 const useHashLocation = () => {
-  const indexedPaths = ['/admin', '/kids-kathak-bellevue', '/kathak-classes-redmond', '/adult-kathak-bellevue', '/trial-class'];
+  const indexedPaths = ['/admin', '/kids-kathak-bellevue', '/kathak-classes-redmond', '/adult-kathak-bellevue', '/trial-class', '/trial-class/thank-you'];
   const getLocation = () => indexedPaths.includes(window.location.pathname)
     ? window.location.pathname
     : window.location.hash.replace(/^#/, '') || '/';
@@ -222,6 +222,9 @@ const App: React.FC = () => {
       break;
     case '/trial-class':
       content = <LandingPage kind="trial" />;
+      break;
+    case '/trial-class/thank-you':
+      content = <LandingPage kind="trial-thank-you" />;
       break;
     case '/dashboard':
       content = user ? <Dashboard user={user} /> : <Home />;

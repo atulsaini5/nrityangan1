@@ -4,7 +4,7 @@ import TrialClassForm from '../components/TrialClassForm';
 import { CLASSES, LOCATIONS } from '../constants';
 import { nrityanganImage } from '../lib/storage';
 
-type LandingPageKind = 'kids-bellevue' | 'redmond' | 'adult-bellevue' | 'trial';
+type LandingPageKind = 'kids-bellevue' | 'redmond' | 'adult-bellevue' | 'trial' | 'trial-thank-you';
 
 interface LandingPageProps {
   kind: LandingPageKind;
@@ -17,7 +17,7 @@ const formatTime = (time: string) => {
   return `${hours}:${minutes.toString().padStart(2, '0')} ${period}`;
 };
 
-const PAGE_COPY: Record<Exclude<LandingPageKind, 'trial'>, {
+const PAGE_COPY: Record<Exclude<LandingPageKind, 'trial' | 'trial-thank-you'>, {
   eyebrow: string;
   title: string;
   intro: string;
@@ -55,7 +55,7 @@ const PAGE_COPY: Record<Exclude<LandingPageKind, 'trial'>, {
   },
 };
 
-const getRelevantClasses = (kind: Exclude<LandingPageKind, 'trial'>) => {
+const getRelevantClasses = (kind: Exclude<LandingPageKind, 'trial' | 'trial-thank-you'>) => {
   const page = PAGE_COPY[kind];
   return CLASSES.filter((classSession) => {
     const atLocation = page.locationIds.includes(classSession.locationId);
@@ -88,7 +88,23 @@ const TrialPage = () => (
   </div>
 );
 
-const LocationIntentPage: React.FC<{ kind: Exclude<LandingPageKind, 'trial'> }> = ({ kind }) => {
+const TrialThankYouPage = () => (
+  <section className="flex min-h-[65vh] items-center bg-rose-50/50 px-4 py-16">
+    <div className="mx-auto w-full max-w-2xl rounded-3xl bg-white px-6 py-14 text-center shadow-xl ring-1 ring-slate-200 sm:px-12">
+      <CheckCircle2 className="mx-auto text-emerald-500" size={64} />
+      <p className="mt-6 text-sm font-semibold uppercase tracking-[0.2em] text-rose-600">Request received</p>
+      <h1 className="mt-3 font-serif text-4xl font-bold text-slate-900">Thank you for booking a trial class</h1>
+      <p className="mx-auto mt-5 max-w-lg leading-relaxed text-slate-600">
+        Our team has been notified and will contact you to confirm the best available class and location.
+      </p>
+      <a href="/" className="mt-8 inline-flex items-center gap-2 rounded-full bg-rose-600 px-7 py-3.5 font-semibold text-white hover:bg-rose-700">
+        Return to Nrityangan <ArrowRight size={18} />
+      </a>
+    </div>
+  </section>
+);
+
+const LocationIntentPage: React.FC<{ kind: Exclude<LandingPageKind, 'trial' | 'trial-thank-you'> }> = ({ kind }) => {
   const page = PAGE_COPY[kind];
   const classes = getRelevantClasses(kind);
   const locations = LOCATIONS.filter((location) => page.locationIds.includes(location.id));
@@ -161,6 +177,10 @@ const LocationIntentPage: React.FC<{ kind: Exclude<LandingPageKind, 'trial'> }> 
   );
 };
 
-const LandingPage: React.FC<LandingPageProps> = ({ kind }) => kind === 'trial' ? <TrialPage /> : <LocationIntentPage kind={kind} />;
+const LandingPage: React.FC<LandingPageProps> = ({ kind }) => {
+  if (kind === 'trial') return <TrialPage />;
+  if (kind === 'trial-thank-you') return <TrialThankYouPage />;
+  return <LocationIntentPage kind={kind} />;
+};
 
 export default LandingPage;
