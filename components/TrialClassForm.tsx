@@ -95,6 +95,10 @@ const TrialClassForm: React.FC<TrialClassFormProps> = ({ isOpen = true, onClose 
 
       setStatus('success');
       setFormData(initialFormData);
+
+      // Use a dedicated confirmation page so Google Ads records only
+      // successfully submitted trial requests, never ordinary form visits.
+      window.location.assign('/trial-class/thank-you');
     } catch (error) {
       setStatus('error');
       setErrorMessage(error instanceof Error ? error.message : 'Unable to submit your request.');

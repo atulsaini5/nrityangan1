@@ -4,7 +4,7 @@ export default {
     "./*.{html,ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./pages/**/*.{ts,tsx}",
-    "./{kids-kathak-bellevue,kathak-classes-redmond,adult-kathak-bellevue,trial-class}/index.html",
+    "./{kids-kathak-bellevue,kathak-classes-redmond,adult-kathak-bellevue,trial-class}/**/index.html",
   ],
   theme: {
     extend: {
