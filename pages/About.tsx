@@ -67,7 +67,7 @@ const About: React.FC = () => {
               <div>
                 <h3 className="font-serif text-2xl font-bold mb-4">Our Affiliation</h3>
                 <p className="text-slate-300 mb-6 text-lg max-w-2xl">
-                  Nrityangan Kathak Academy is registered with Hindusthan Art & Music Society (HAMS). It also runs a Global Examination Board of Indian Art & Culture. Our curriculum, exam and certification is through Hindustan art and music society.
+                  Nrityangan Kathak Studio is registered with Hindusthan Art & Music Society (HAMS). It also runs a Global Examination Board of Indian Art & Culture. Our curriculum, exam and certification is through Hindustan art and music society.
                 </p>
                 <a 
                   href="https://hamsociety.com/" 
@@ -113,7 +113,7 @@ const About: React.FC = () => {
 
                <div className="space-y-6 text-slate-600 leading-relaxed">
                  <p>
-                   Chandrayee founded Nrityangan Kathak Academy nearly 30 years ago and has since dedicated her life to teaching, mentoring, and conducting workshops for students of all ages.
+                   Chandrayee founded Nrityangan Kathak Studio nearly 30 years ago and has since dedicated her life to teaching, mentoring, and conducting workshops for students of all ages.
                  </p>
                  
                  <div>
