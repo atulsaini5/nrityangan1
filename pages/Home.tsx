@@ -12,6 +12,11 @@ const Home: React.FC = () => {
           <img 
             src={nrityanganImage('stageold.avif')} 
             alt="Kathak Dancer" 
+            width={1600}
+            height={657}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 to-transparent" />

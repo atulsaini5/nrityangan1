@@ -112,7 +112,7 @@ const LocationIntentPage: React.FC<{ kind: Exclude<LandingPageKind, 'trial' | 't
   return (
     <div className="bg-white">
       <section className="relative overflow-hidden bg-slate-950">
-        <img src={nrityanganImage(page.image)} alt={page.imageAlt} className="absolute inset-0 h-full w-full object-cover opacity-35" />
+        <img src={nrityanganImage(page.image)} alt={page.imageAlt} width={1600} height={657} loading="eager" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover opacity-35" />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-slate-950/30" />
         <div className="relative mx-auto max-w-7xl px-4 py-20 text-white sm:px-6 sm:py-28 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-rose-300">{page.eyebrow}</p>

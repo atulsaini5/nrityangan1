@@ -49,7 +49,7 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
           <div className="flex justify-between h-20 items-center">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
-              <img src={nrityanganImage('Nrityangan Logo.jpg')} alt="Nrityangan" className="h-12 w-12 rounded-full object-cover" />
+              <img src={nrityanganImage('Nrityangan Logo.jpg')} alt="Nrityangan" width={48} height={48} decoding="async" className="h-12 w-12 rounded-full object-cover" />
               <span className="font-serif text-2xl font-bold tracking-tight text-slate-900">Nrityangan<span className="text-rose-500">.</span></span>
             </Link>
 

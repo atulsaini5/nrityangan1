@@ -8,7 +8,7 @@ const About: React.FC = () => {
       {/* Hero Section */}
       <div className="relative py-24 bg-slate-900 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-             <img src={nrityanganImage('stage.png')} alt="Kathak performance" className="w-full h-full object-cover" />
+             <img src={nrityanganImage('stage.png')} alt="Kathak performance" width={720} height={480} loading="eager" fetchPriority="high" decoding="async" className="w-full h-full object-cover" />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <h1 className="font-serif text-4xl md:text-6xl font-bold text-white mb-6">About Nrityangan</h1>
@@ -36,6 +36,10 @@ const About: React.FC = () => {
                <img 
                  src={nrityanganImage('Int-Teen-Adult.png')} 
                  alt="Classroom" 
+                 width={720}
+                 height={480}
+                 loading="lazy"
+                 decoding="async"
                  className="relative rounded-2xl shadow-xl w-full h-96 object-cover"
                />
             </div>
@@ -62,7 +66,7 @@ const About: React.FC = () => {
             </div>
             <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center">
               <div className="bg-white/10 p-6 rounded-2xl backdrop-blur-sm border border-white/20">
-                <img src={nrityanganImage('ham.png')} alt="Hindusthan Art & Music Society" className="h-16 w-16 object-contain" />
+                <img src={nrityanganImage('ham.png')} alt="Hindusthan Art & Music Society" width={64} height={64} loading="lazy" decoding="async" className="h-16 w-16 object-contain" />
               </div>
               <div>
                 <h3 className="font-serif text-2xl font-bold mb-4">Our Affiliation</h3>
@@ -95,6 +99,10 @@ const About: React.FC = () => {
                <img 
                 src={nrityanganImage('Chandrayee.jpeg')} 
                 alt="Chandrayee Bhattacharyya" 
+                width={640}
+                height={800}
+                loading="lazy"
+                decoding="async"
                 className="absolute inset-0 w-full h-full object-cover" 
                />
                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8 lg:hidden">

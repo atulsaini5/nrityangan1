@@ -147,7 +147,7 @@ const Gallery: React.FC = () => {
               <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
                 {collection.images.map(image => (
                   <button key={image.url} onClick={() => setSelectedUrl(image.url)} className="group aspect-[4/3] overflow-hidden rounded-xl bg-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2" aria-label={`View ${image.name}`}>
-                    <img src={image.url} alt={image.name.replace(/[-_]/g, ' ')} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <img src={image.url} alt={image.name.replace(/[-_]/g, ' ')} width={800} height={600} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   </button>
                 ))}
               </div>
@@ -166,7 +166,7 @@ const Gallery: React.FC = () => {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {videos.map((video) => <a key={video.id} href={video.url} target="_blank" rel="noopener noreferrer" className="group overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
               <div className="relative aspect-video overflow-hidden bg-slate-200">
-                <img src={video.thumbnail} alt={video.title} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-105"/>
+                <img src={video.thumbnail} alt={video.title} width={1280} height={720} loading="lazy" decoding="async" className="h-full w-full object-cover transition duration-500 group-hover:scale-105"/>
                 <span className="absolute inset-0 flex items-center justify-center bg-black/10 transition group-hover:bg-black/25"><span className="rounded-full bg-red-600 p-4 text-white shadow-lg"><Play size={24} fill="currentColor"/></span></span>
               </div>
               <div className="p-5"><h3 className="line-clamp-2 font-semibold text-slate-900">{video.title}</h3><p className="mt-2 text-sm text-slate-500">{video.publishedAt ? new Date(video.publishedAt).toLocaleDateString() : 'Watch on YouTube'}</p></div>
@@ -179,7 +179,7 @@ const Gallery: React.FC = () => {
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4" role="dialog" aria-modal="true" aria-label="Photo viewer" onClick={() => setSelectedUrl(null)}>
           <button onClick={() => setSelectedUrl(null)} className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Close"><X size={28} /></button>
           <button onClick={event => { event.stopPropagation(); move(-1); }} className="absolute left-3 rounded-full bg-white/10 p-3 text-white hover:bg-white/20" aria-label="Previous photo"><ChevronLeft size={32} /></button>
-          <img src={selectedUrl} alt="Gallery preview" className="max-h-[88vh] max-w-[88vw] object-contain" onClick={event => event.stopPropagation()} />
+          <img src={selectedUrl} alt="Gallery preview" width={1600} height={1200} decoding="async" className="max-h-[88vh] max-w-[88vw] object-contain" onClick={event => event.stopPropagation()} />
           <button onClick={event => { event.stopPropagation(); move(1); }} className="absolute right-3 rounded-full bg-white/10 p-3 text-white hover:bg-white/20" aria-label="Next photo"><ChevronRight size={32} /></button>
         </div>
       )}
