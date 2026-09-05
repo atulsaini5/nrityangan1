@@ -1,4 +1,13 @@
 {
+  "images": {
+    "sizes": [320, 640, 1600],
+    "domains": [],
+    "remotePatterns": [{ "protocol": "https", "hostname": "^tnvyqbxtlplkkozjahmy\\.supabase\\.co$", "pathname": "^/storage/v1/object/public/gallery/.*$", "search": "" }],
+    "localPatterns": [],
+    "qualities": [75],
+    "formats": ["image/webp"],
+    "minimumCacheTTL": 86400
+  },
   "headers": [
     {
       "source": "/images/(.*)",
