@@ -24,7 +24,7 @@ const ClassCard = ({ title, age, description, sessions, image }: { title: string
   <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full group">
     <div className="h-56 overflow-hidden relative">
       <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/0 transition-colors z-10"></div>
-      <img src={image} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+      <img src={image} alt={title} width={821} height={480} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
       <div className="absolute top-4 right-4 z-20">
          <span className="text-xs font-bold text-slate-800 uppercase tracking-wider bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-sm border border-gray-100">{age}</span>
       </div>

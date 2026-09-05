@@ -165,7 +165,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user }) => {
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                 <h3 className="font-serif text-lg font-bold text-slate-900 mb-4">Latest Rehearsal</h3>
                 <div className="relative rounded-xl overflow-hidden aspect-video group cursor-pointer">
-                  <img src={REHEARSAL_VIDEOS[0].thumbnailUrl} alt="Video thumb" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  <img src={REHEARSAL_VIDEOS[0].thumbnailUrl} alt="Video thumb" width={1280} height={720} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 flex items-center justify-center transition-colors">
                     <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center pl-1 group-hover:scale-110 transition-transform">
                       <div className="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-white border-b-8 border-b-transparent"></div>
@@ -229,7 +229,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user }) => {
             {REHEARSAL_VIDEOS.map((video) => (
               <div key={video.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all group">
                 <div className="relative aspect-video">
-                  <img src={video.thumbnailUrl} alt={video.title} className="w-full h-full object-cover" />
+                  <img src={video.thumbnailUrl} alt={video.title} width={1280} height={720} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors flex items-center justify-center cursor-pointer">
                      <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center pl-1 text-rose-500 shadow-xl transform group-hover:scale-110 transition-transform">
                         <Video size={24} fill="currentColor" />
