@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { nextGalleryBatch } from '../lib/galleryPagination';
 import { ChevronLeft, ChevronRight, ExternalLink, Image as ImageIcon, Play, X, Youtube } from 'lucide-react';
 
 type StorageObject = { name: string; id?: string | null; metadata?: { mimetype?: string } | null };
@@ -65,15 +66,54 @@ const Gallery: React.FC = () => {
   const [videoLoading, setVideoLoading] = useState(false);
   const [videoError, setVideoError] = useState('');
   const [videoAttempted, setVideoAttempted] = useState(false);
-  const [albums, setAlbums] = useState<string[]>([]);
-  const [album, setAlbum] = useState('');
-  const [page, setPage] = useState(0);
+  const albums = useRef<string[]>([]);
+  const cursor = useRef({ album: 0, offset: 0 });
+  const pending = useRef<AbortController | null>(null);
+  const sentinel = useRef<HTMLDivElement>(null);
   const [hasMore, setHasMore] = useState(false);
   const [retry, setRetry] = useState(0);
+
+  const loadMore = useCallback(async () => {
+    if (pending.current || cursor.current.album >= albums.current.length) return;
+    const controller = new AbortController();
+    pending.current = controller;
+    setLoading(true);
+    setError('');
+    try {
+      const result = await nextGalleryBatch(albums.current, cursor.current, PAGE_SIZE,
+        (album, offset, limit) => {
+          controller.signal.throwIfAborted();
+          return listObjects(album, offset, limit, controller.signal);
+        });
+      if (controller.signal.aborted) return;
+      cursor.current = result.cursor;
+      setCollections(previous => {
+        const updated = previous.map(collection => ({ ...collection, images: [...collection.images] }));
+        for (const photo of result.photos) {
+          let collection = updated.find(item => item.name === photo.album);
+          if (!collection) {
+            collection = { name: photo.album, title: displayTitle(photo.album), images: [] };
+            updated.push(collection);
+          }
+          const url = publicUrl(`${photo.album}/${photo.name}`);
+          if (!collection.images.some(image => image.url === url)) collection.images.push({ name: photo.name, url });
+        }
+        return updated;
+      });
+      setHasMore(result.hasMore);
+    } catch (err) {
+      if (!controller.signal.aborted) setError(err instanceof Error ? err.message : 'Unable to load photos.');
+    } finally {
+      if (pending.current === controller) pending.current = null;
+      if (!controller.signal.aborted) setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
     const controller = new AbortController();
+    setLoading(true);
+    setError('');
 
     const loadGallery = async () => {
       if (!supabaseUrl || !anonKey) {
@@ -91,8 +131,9 @@ const Gallery: React.FC = () => {
         } while (batch.length === 100);
         const folders = rootItems.filter(item => !item.id && !imagePattern.test(item.name)).map(item => item.name).sort((a, b) => b.localeCompare(a));
         if (!cancelled) {
-          setAlbums(folders);
-          setAlbum(folders[0] || '');
+          albums.current = folders;
+          setHasMore(folders.length > 0);
+          await loadMore();
         }
       } catch (err) {
         if (!cancelled) setError(err instanceof Error ? err.message : 'Unable to load the gallery.');
@@ -102,28 +143,17 @@ const Gallery: React.FC = () => {
     };
 
     loadGallery();
-    return () => { cancelled = true; controller.abort(); };
-  }, []);
+    return () => { cancelled = true; controller.abort(); pending.current?.abort(); pending.current = null; };
+  }, [loadMore, retry]);
 
   useEffect(() => {
-    if (!album) return;
-    const controller = new AbortController();
-    setLoading(true);
-    setError('');
-    setCollections([]);
-    setSelectedUrl(null);
-    setHasMore(false);
-    listObjects(album, page * PAGE_SIZE, PAGE_SIZE, controller.signal).then(items => {
-      if (controller.signal.aborted) return;
-      setCollections([{ name: album, title: displayTitle(album), images: items.filter(item => imagePattern.test(item.name)).map(item => ({ name: item.name, url: publicUrl(`${album}/${item.name}`) })) }]);
-      setHasMore(items.length === PAGE_SIZE);
-    }).catch(err => {
-      if (!controller.signal.aborted) setError(err instanceof Error ? err.message : 'Unable to load photos.');
-    }).finally(() => {
-      if (!controller.signal.aborted) setLoading(false);
-    });
-    return () => controller.abort();
-  }, [album, page, retry]);
+    if (tab !== 'photos' || selectedUrl || loading || error || !hasMore || !sentinel.current || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) void loadMore();
+    }, { rootMargin: '400px 0px' });
+    observer.observe(sentinel.current);
+    return () => observer.disconnect();
+  }, [tab, selectedUrl, loading, error, hasMore, loadMore]);
 
   useEffect(() => {
     if (tab !== 'videos' || videoAttempted) return;
@@ -183,14 +213,6 @@ const Gallery: React.FC = () => {
             <button onClick={() => setTab('videos')} className={`flex items-center gap-2 rounded-full px-6 py-3 font-medium transition ${tab === 'videos' ? 'bg-red-600 text-white shadow' : 'text-slate-600 hover:text-red-600'}`}><Youtube size={19}/> Videos</button>
           </div>
         </div>
-        {tab === 'photos' && loading && <p className="py-20 text-center text-slate-500">Loading photos...</p>}
-        {tab === 'photos' && albums.length > 0 && <div className="mb-8 flex flex-wrap items-center justify-center gap-3">
-          <label htmlFor="gallery-album" className="font-medium text-slate-700">Choose an album</label>
-          <select id="gallery-album" value={album} onChange={event => { setAlbum(event.target.value); setPage(0); }} className="max-w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
-            {albums.map(name => <option key={name} value={name}>{displayTitle(name)}</option>)}
-          </select>
-        </div>}
-        {tab === 'photos' && error && <div role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-6 text-center text-rose-700">{error}{album && <button onClick={() => setRetry(value => value + 1)} className="ml-4 underline">Try again</button>}</div>}
         {tab === 'photos' && !loading && !error && collections.length === 0 && <p className="py-20 text-center text-slate-500">No gallery photos are available yet.</p>}
 
         {tab === 'photos' && <div className="space-y-14">
@@ -198,22 +220,23 @@ const Gallery: React.FC = () => {
             <section key={collection.name}>
               <div className="mb-6 flex items-end justify-between border-b border-rose-200 pb-3">
                 <h2 className="font-serif text-2xl font-bold text-slate-900">{collection.title}</h2>
-                <span className="text-sm text-slate-500">Page {page + 1} · {collection.images.length} photos</span>
+                <span className="text-sm text-slate-500">{collection.images.length} photos loaded</span>
               </div>
               <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
                 {collection.images.map(image => (
-                  <button key={image.url} onClick={() => setSelectedUrl(image.url)} className="group aspect-[4/3] overflow-hidden rounded-xl bg-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2" aria-label={`View ${image.name}`}>
+                  <button key={image.url} onClick={() => setSelectedUrl(image.url)} style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 228px' }} className="group aspect-[4/3] overflow-hidden rounded-xl bg-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2" aria-label={`View ${image.name}`}>
                     <GalleryPhoto key={image.url} image={image} />
                   </button>
                 ))}
               </div>
             </section>
           ))}
-          {album && <nav aria-label="Photo pages" className="flex items-center justify-center gap-6">
-            <button disabled={loading || page === 0} onClick={() => setPage(value => value - 1)} className="rounded-full border border-slate-300 px-6 py-3 disabled:opacity-40">Previous photos</button>
-            <span aria-live="polite">Page {page + 1}</span>
-            <button disabled={loading || !hasMore} onClick={() => setPage(value => value + 1)} className="rounded-full bg-rose-600 px-6 py-3 text-white disabled:opacity-40">Next photos</button>
-          </nav>}
+          <div ref={sentinel} className="min-h-20 text-center">
+            {loading && <p role="status" className="py-6 text-slate-500">Loading photos...</p>}
+            {error && <div role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-6 text-rose-700">{error} <button onClick={() => albums.current.length ? void loadMore() : setRetry(value => value + 1)} className="ml-4 underline">Try again</button></div>}
+            {!loading && !error && hasMore && <button onClick={() => void loadMore()} className="rounded-full bg-rose-600 px-6 py-3 text-white">Load more photos</button>}
+            {!loading && !error && !hasMore && allImages.length > 0 && <p className="py-6 text-slate-500">You've seen all {allImages.length} photos.</p>}
+          </div>
         </div>}
 
         {tab === 'videos' && <section>
