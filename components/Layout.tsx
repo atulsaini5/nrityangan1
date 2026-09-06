@@ -5,7 +5,7 @@ import { nrityanganImage } from '../lib/storage';
 // Custom hook to replace useLocation from react-router-dom
 const useHashLocation = () => {
   const indexedPaths = ['/kids-kathak-bellevue', '/kathak-classes-redmond', '/adult-kathak-bellevue', '/trial-class'];
-  const getLocation = () => indexedPaths.includes(window.location.pathname) ? window.location.pathname : window.location.hash.replace(/^#/, '') || '/';
+  const getLocation = () => indexedPaths.includes(window.location.pathname) || window.location.pathname.startsWith('/blog') ? window.location.pathname : window.location.hash.replace(/^#/, '') || '/';
   const [loc, setLoc] = useState(getLocation);
   useEffect(() => {
     const handler = () => setLoc(getLocation());
@@ -19,7 +19,7 @@ const useHashLocation = () => {
 const Link = ({ to, children, className, onClick }: { to: string; children: React.ReactNode; className?: string; onClick?: () => void }) => {
   return (
     <a 
-      href={to === '/' ? '/' : `/#${to}`}
+      href={to === '/' || to === '/blog' ? to : `/#${to}`}
       className={className} 
       onClick={onClick}
     >
@@ -58,6 +58,7 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
               <Link to="/" className={isActive('/')}>Home</Link>
               <Link to="/classes" className={isActive('/classes')}>Classes</Link>
               <Link to="/gallery" className={isActive('/gallery')}>Gallery</Link>
+              <Link to="/blog" className={window.location.pathname.startsWith('/blog') ? 'text-rose-500 font-semibold' : 'text-gray-600 hover:text-rose-500'}>Journal</Link>
               <Link to="/about" className={isActive('/about')}>About</Link>
               {isLoggedIn && (
                 <>
@@ -102,6 +103,7 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
               <Link to="/" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">Home</Link>
               <Link to="/classes" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">Classes</Link>
               <Link to="/gallery" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">Gallery</Link>
+              <Link to="/blog" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">Journal</Link>
               <Link to="/about" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">About</Link>
               {isLoggedIn && (
                  <>
@@ -187,6 +189,8 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
               <ul className="space-y-2 text-slate-300 text-sm">
                 <li><Link to="/classes" className="hover:text-white">Our Offerings</Link></li>
                 <li><Link to="/gallery" className="hover:text-white">Gallery</Link></li>
+                <li><Link to="/blog" className="hover:text-white">Kathak Journal</Link></li>
+                <li><a href="/admin" className="hover:text-white">Admin</a></li>
                 <li><Link to="/about" className="hover:text-white">About Us</Link></li>
                 <li><a href="/trial-class" className="hover:text-white">Book a Trial Class</a></li>
               </ul>

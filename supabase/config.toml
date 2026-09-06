@@ -6,3 +6,6 @@ verify_jwt = false
 
 [functions.youtube-videos]
 verify_jwt = false
+
+[functions.blog]
+verify_jwt = false

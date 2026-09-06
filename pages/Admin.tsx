@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CheckCircle2, ImageUp, Loader2, LockKeyhole, RefreshCw } from 'lucide-react';
+import BlogAdmin from '../components/BlogAdmin';
 
 type TrialRequest = {
   id: string; created_at: string; contact_name: string; student_name: string;
@@ -101,10 +102,12 @@ const Admin: React.FC = () => {
     <main className="min-h-screen bg-slate-100 p-4 md:p-8">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div><h1 className="font-serif text-3xl font-bold text-slate-900">Nrityangan Admin</h1><p className="text-slate-500">Trial requests and gallery uploads</p></div>
+          <div><h1 className="font-serif text-3xl font-bold text-slate-900">Nrityangan Admin</h1><p className="text-slate-500">Journal, trial requests and gallery uploads</p></div>
           <button onClick={load} disabled={busy} className="flex items-center gap-2 rounded-xl bg-white px-4 py-2 shadow-sm"><RefreshCw size={17} /> Refresh</button>
         </div>
         {message && <p className="mb-6 rounded-xl bg-white p-4 text-sm text-slate-700 shadow-sm">{message}</p>}
+
+        <BlogAdmin accessCode={accessCode} />
 
         <section className="mb-10 rounded-2xl bg-white p-5 shadow-sm">
           <h2 className="mb-5 text-xl font-bold text-slate-900">Trial class requests</h2>

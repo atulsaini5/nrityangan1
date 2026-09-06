@@ -11,6 +11,9 @@ node_modules
 dist
 dist-ssr
 *.local
+*.local.*
+supabase/.temp/
+output/
 
 # Editor directories and files
 .vscode/*

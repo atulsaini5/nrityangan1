@@ -6,6 +6,7 @@ import About from './pages/About';
 import Gallery from './pages/Gallery';
 import LandingPage from './pages/LandingPage';
 import Admin from './pages/Admin';
+import Blog from './pages/Blog';
 import { MOCK_USER, CLASSES, LOCATIONS, CLASS_CATEGORIES } from './constants';
 import { User, ClassSession } from './types';
 import { Clock, MapPin, Calendar as CalendarIcon } from 'lucide-react';
@@ -168,7 +169,7 @@ const ClassesPage = () => {
 // Custom Hook for Hash-based routing
 const useHashLocation = () => {
   const indexedPaths = ['/admin', '/kids-kathak-bellevue', '/kathak-classes-redmond', '/adult-kathak-bellevue', '/trial-class', '/trial-class/thank-you'];
-  const getLocation = () => indexedPaths.includes(window.location.pathname)
+  const getLocation = () => (indexedPaths.includes(window.location.pathname) || /^\/blog(?:\/|$)/.test(window.location.pathname))
     ? window.location.pathname
     : window.location.hash.replace(/^#/, '') || '/';
   const [loc, setLoc] = useState(getLocation);
@@ -233,7 +234,9 @@ const App: React.FC = () => {
       content = user ? <Dashboard user={user} /> : <Home />;
       break;
     default:
-      content = <Home />;
+      content = /^\/blog(?:\/|$)/.test(currentPath)
+        ? <Blog slug={currentPath.replace(/^\/blog\/?/, '').replace(/\/$/, '') || undefined} />
+        : <Home />;
   }
 
   // Handle redirects side-effect

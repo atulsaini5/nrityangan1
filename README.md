@@ -41,3 +41,7 @@ The **Book a Trial Class** form posts to the `trial-class-request` Supabase Edge
 
 The `followup_completed` boolean appears as a checkbox in the Supabase table editor and defaults to unchecked. Public table access is blocked by RLS; submissions are written only by the Edge Function.
 
+## Kathak Journal
+
+Readers visit `/blog`. The existing `/admin` access code opens the journal editor for drafts, image uploads, previews and publishing. See [the rollout and verification guide](docs/blog-rollout.md) for the isolated blog bucket, database migration, welcome story, local preview, and production sequence.
+
