@@ -10,7 +10,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: `${projectRoot}index.html`,
-        blog: `${projectRoot}blog/index.html`,
+        blog: `${projectRoot}blog-shell.html`,
         kidsKathakBellevue: `${projectRoot}kids-kathak-bellevue/index.html`,
         kathakClassesRedmond: `${projectRoot}kathak-classes-redmond/index.html`,
         adultKathakBellevue: `${projectRoot}adult-kathak-bellevue/index.html`,

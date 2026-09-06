@@ -14,11 +14,27 @@ const date = (value: string | null) =>
       })
     : "";
 
-export default function Blog({ slug }: { slug?: string }) {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [page, setPage] = useState(0);
-  const [more, setMore] = useState(false);
-  const [loading, setLoading] = useState(true);
+export default function Blog({
+  slug,
+  initial,
+}: {
+  slug?: string;
+  initial?: { posts: BlogPost[]; page: number; hasMore: boolean };
+}) {
+  const [posts, setPosts] = useState<BlogPost[]>(initial?.posts || []);
+  const [page] = useState(
+    initial?.page ??
+      Math.max(
+        0,
+        Number(
+          typeof window !== "undefined"
+            ? new URLSearchParams(window.location.search).get("page") || 1
+            : 1,
+        ) - 1,
+      ),
+  );
+  const [more, setMore] = useState(initial?.hasMore || false);
+  const [loading, setLoading] = useState(!initial);
   const [error, setError] = useState("");
   const [retry, setRetry] = useState(0);
   useEffect(() => {
@@ -216,26 +232,20 @@ export default function Blog({ slug }: { slug?: string }) {
         </div>
         <div className="flex justify-center gap-6 mt-10">
           {page > 0 && (
-            <button
-              onClick={() => {
-                setPage(page - 1);
-                window.scrollTo(0, 0);
-              }}
+            <a
+              href={page === 1 ? "/blog" : `/blog?page=${page}`}
               className="text-rose-700 underline"
             >
               Newer stories
-            </button>
+            </a>
           )}
           {more && (
-            <button
-              onClick={() => {
-                setPage(page + 1);
-                window.scrollTo(0, 0);
-              }}
+            <a
+              href={`/blog?page=${page + 2}`}
               className="text-rose-700 underline"
             >
               Older stories
-            </button>
+            </a>
           )}
         </div>
       </section>

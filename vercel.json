@@ -2,7 +2,14 @@
   "images": {
     "sizes": [320, 640, 1600],
     "domains": [],
-    "remotePatterns": [{ "protocol": "https", "hostname": "^tnvyqbxtlplkkozjahmy\\.supabase\\.co$", "pathname": "^/storage/v1/object/public/gallery/.*$", "search": "" }],
+    "remotePatterns": [
+      {
+        "protocol": "https",
+        "hostname": "^tnvyqbxtlplkkozjahmy\\.supabase\\.co$",
+        "pathname": "^/storage/v1/object/public/gallery/.*$",
+        "search": ""
+      }
+    ],
     "localPatterns": [],
     "qualities": [75],
     "formats": ["image/webp"],
@@ -10,15 +17,26 @@
   },
   "headers": [
     {
+      "source": "/blog-shell.html",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
+    },
+    {
       "source": "/images/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     }
   ],
+  "functions": {
+    "api/journal.mjs": { "includeFiles": "{dist/blog-shell.html,dist-ssr/**}" }
+  },
   "rewrites": [
     { "source": "/admin", "destination": "/index.html" },
-    { "source": "/blog/:path*", "destination": "/blog/index.html" }
+    { "source": "/blog", "destination": "/api/journal" },
+    { "source": "/blog/:slug*", "destination": "/api/journal?slug=:slug*" },
+    { "source": "/sitemap.xml", "destination": "/api/journal?sitemap=1" }
   ]
 }
-
