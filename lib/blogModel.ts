@@ -70,7 +70,7 @@ export const validatePost = (input: Record<string, unknown>) => {
 
 // No HTML is interpreted. The editor and reader share this deliberately small Markdown vocabulary.
 export type BlogBlock = {
-  type: "heading" | "quote" | "paragraph" | "list";
+  type: "heading" | "quote" | "paragraph" | "list" | "image" | "link";
   lines: string[];
 };
 export function parseBlogContent(content: string): BlogBlock[] {
@@ -80,6 +80,21 @@ export function parseBlogContent(content: string): BlogBlock[] {
     .filter((part) => part.trim())
     .map((part) => {
       const lines = part.trim().split("\n");
+      const image = part
+        .trim()
+        .match(/^!\[([^\]\n]+)\]\(blog-images\/([^\s)]+)\)$/);
+      if (image && isBlogImagePath(image[2]))
+        return { type: "image", lines: [image[1], image[2]] };
+      const link = part.trim().match(/^\[([^\]\n]+)\]\((https:\/\/[^\s)]+)\)$/);
+      if (link) {
+        try {
+          const url = new URL(link[2]);
+          if (url.protocol === "https:" && !url.username && !url.password)
+            return { type: "link", lines: [link[1], url.href] };
+        } catch {
+          /* Invalid links remain ordinary text. */
+        }
+      }
       if (lines.every((line) => line.startsWith("- ")))
         return { type: "list", lines: lines.map((line) => line.slice(2)) };
       if (part.trim().startsWith("## "))

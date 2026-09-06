@@ -19,6 +19,29 @@ const post = {
 };
 const template =
   "<html><head><!-- SEO --></head><body><!-- JOURNAL --></body></html>";
+test("story media uses escaped captions, isolated blog images and safe HTTPS links", () => {
+  const content = [
+    "![Students <dance>](blog-images/c9848862-0df3-4fce-9a38-630bf5d79b9b/hero.webp)",
+    "[Watch the performance](https://www.youtube.com/watch?v=9hmsb48Z3LI)",
+    "[Unsafe](javascript:alert(1))",
+    "![Unsafe](https://example.com/tracker.png)",
+    "[Credentials](https://user:secret@example.com/)",
+  ].join("\n\n");
+  const html = renderBlog(
+    template,
+    [{ ...post, content }],
+    post.slug,
+    0,
+    false,
+  );
+  assert.match(html, /<figcaption[^>]*>Students &lt;dance&gt;<\/figcaption>/);
+  assert.match(html, /loading="lazy"/);
+  assert.match(html, /href="https:\/\/www.youtube.com\/watch\?v=9hmsb48Z3LI"/);
+  assert.doesNotMatch(
+    html,
+    /href="javascript:|src="https:\/\/example.com|href="https:\/\/user:/,
+  );
+});
 async function request(
   url,
   data = { posts: [post], hasMore: false },
@@ -61,11 +84,13 @@ test("built renderer serves full escaped article, canonical and valid structured
   assert.equal(schema[0].dateModified, post.updated_at);
   assert.equal(schema[1]["@type"], "BreadcrumbList");
   assert.match(r.body, /og:image/);
+  assert.doesNotMatch(r.body, /<time\b/);
 });
 test("pagination is crawlable, canonical and empty pages return 404", async () => {
   const r = await request("/blog?page=2", { posts: [post], hasMore: true });
   assert.match(r.body, /href="\/blog\?page=3"/);
   assert.match(r.body, /href="\/blog"[^>]*>Newer stories/);
+  assert.doesNotMatch(r.body, /<time\b/);
   assert.match(
     r.body,
     /canonical" href="https:\/\/www.kathakseattle.com\/blog\?page=2"/,

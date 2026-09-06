@@ -484,7 +484,11 @@ export default function BlogAdmin({ accessCode }: { accessCode: string }) {
                   />
                   <p className="text-xs text-slate-500 mt-2">
                     Select text and use the toolbar. Blank lines separate
-                    paragraphs. Preview shows your formatted story.
+                    paragraphs. Preview shows your formatted story. Add a link
+                    on its own line as [Watch the performance](https://...).{" "}
+                    Blog photos use
+                    ![Caption](blog-images/image-folder/hero.webp) on a separate
+                    line.
                   </p>
                 </div>
               </>

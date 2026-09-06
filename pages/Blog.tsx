@@ -4,16 +4,6 @@ import BlogContent from "../components/BlogContent";
 import { blogImageUrl, getBlogs } from "../lib/blog";
 import type { BlogPost } from "../lib/blogModel";
 
-const date = (value: string | null) =>
-  value
-    ? new Date(value).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        timeZone: "America/Los_Angeles",
-      })
-    : "";
-
 export default function Blog({
   slug,
   initial,
@@ -120,9 +110,6 @@ export default function Blog({
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500 my-7">
             <span className="font-semibold text-slate-800">{post.author}</span>
-            <time dateTime={post.published_at || undefined}>
-              {date(post.published_at)}
-            </time>
             <span>
               {Math.max(1, Math.ceil(post.content.split(/\s+/).length / 200))}{" "}
               min read
@@ -213,13 +200,7 @@ export default function Blog({
                 <p className="text-slate-600 leading-relaxed mt-5 mb-7">
                   {post.excerpt}
                 </p>
-                <p className="text-sm text-slate-500">
-                  {post.author}
-                  <br />
-                  <time dateTime={post.published_at || undefined}>
-                    {date(post.published_at)}
-                  </time>
-                </p>
+                <p className="text-sm text-slate-500">{post.author}</p>
                 <a
                   href={`/blog/${post.slug}`}
                   className="inline-flex items-center gap-2 mt-8 text-rose-700 font-semibold"
