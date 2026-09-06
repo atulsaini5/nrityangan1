@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .blog-field { @apply flex flex-col gap-2 text-sm font-semibold text-slate-700; }
+  .blog-field input, .blog-field textarea { @apply w-full rounded-xl border border-slate-200 p-3 font-normal focus:outline-rose-500; }
+  .blog-prose { @apply text-lg leading-8 text-slate-700; overflow-wrap: anywhere; }
+  .blog-prose p { @apply mb-6 whitespace-pre-line; }
+  .blog-prose h2 { @apply font-serif text-3xl text-slate-900 mt-10 mb-5; }
+  .blog-prose blockquote { @apply border-l-4 border-rose-400 pl-6 my-8 font-serif text-2xl italic text-rose-800 whitespace-pre-line; }
+  .blog-prose ul { @apply list-disc pl-7 my-6 space-y-2; }
+}
+
 /* Custom scrollbar for better aesthetics */
 ::-webkit-scrollbar {
   width: 8px;
