@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": "node --test tests/*.test.mjs",
+    "test": "vite build --config vite.blog-server.config.ts && node --test tests/*.test.mjs",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && vite build --config vite.blog-server.config.ts",
     "preview": "vite preview"
   },
   "dependencies": {
