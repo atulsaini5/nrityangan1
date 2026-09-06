@@ -113,8 +113,7 @@ export function renderBlog(
       <footer className="border-t border-rose-100 px-6 py-10 text-center text-sm text-slate-600">
         <p>Nrityangan Kathak Studio · Bellevue &amp; Redmond, Washington</p>
         <p className="mt-4">
-          <a href="/trial-class">Begin your Kathak journey</a> ·{" "}
-          <a href="/admin">Admin</a>
+          <a href="/trial-class">Begin your Kathak journey</a>
         </p>
       </footer>
     </div>,
