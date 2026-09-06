@@ -30,12 +30,9 @@ const Link = ({ to, children, className, onClick }: { to: string; children: Reac
 
 interface LayoutProps {
   children: React.ReactNode;
-  isLoggedIn: boolean;
-  onLogin: () => void;
-  onLogout: () => void;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout }) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useHashLocation();
 
@@ -60,28 +57,6 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
               <Link to="/gallery" className={isActive('/gallery')}>Gallery</Link>
               <Link to="/blog" className={window.location.pathname.startsWith('/blog') ? 'text-rose-500 font-semibold' : 'text-gray-600 hover:text-rose-500'}>Journal</Link>
               <Link to="/about" className={isActive('/about')}>About</Link>
-              {isLoggedIn && (
-                <>
-                  <Link to="/dashboard" className={isActive('/dashboard')}>Dashboard</Link>
-                  <Link to="/videos" className={isActive('/videos')}>Rehearsals</Link>
-                </>
-              )}
-              
-              {!isLoggedIn ? (
-                <button 
-                  onClick={onLogin}
-                  className="bg-rose-500 text-white px-6 py-2 rounded-full hover:bg-rose-600 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                >
-                  Login
-                </button>
-              ) : (
-                <button 
-                  onClick={onLogout}
-                  className="border border-gray-300 text-gray-600 px-6 py-2 rounded-full hover:bg-gray-50 transition-colors"
-                >
-                  Logout
-                </button>
-              )}
             </div>
 
             {/* Mobile menu button */}
@@ -105,23 +80,6 @@ const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, onLogin, onLogout
               <Link to="/gallery" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">Gallery</Link>
               <Link to="/blog" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">Journal</Link>
               <Link to="/about" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">About</Link>
-              {isLoggedIn && (
-                 <>
-                  <Link to="/dashboard" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">Dashboard</Link>
-                  <Link to="/videos" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-500 rounded-md">Rehearsals</Link>
-                </>
-              )}
-              <div className="pt-4 mt-2 border-t border-gray-100">
-                 {!isLoggedIn ? (
-                  <button onClick={() => {onLogin(); setIsMenuOpen(false)}} className="w-full text-center bg-rose-500 text-white px-4 py-3 rounded-md hover:bg-rose-600 font-medium">
-                    Login
-                  </button>
-                 ) : (
-                  <button onClick={() => {onLogout(); setIsMenuOpen(false)}} className="w-full text-center bg-gray-100 text-gray-700 px-4 py-3 rounded-md hover:bg-gray-200 font-medium">
-                    Logout
-                  </button>
-                 )}
-              </div>
             </div>
           </div>
         )}

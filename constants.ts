@@ -1,4 +1,4 @@
-import { Location, ClassSession, User, Video, TuitionItem, CalendarEvent, ClassCategory } from './types';
+import { Location, ClassSession, ClassCategory } from './types';
 import { nrityanganImage } from './lib/storage';
 
 export const LOCATIONS: Location[] = [
@@ -146,32 +146,6 @@ export const CLASSES: ClassSession[] = [
     level: 'Mixed', 
     curriculum: 'Cherished memories through rhythm and grace. Welcoming space for seniors.' 
   },
-];
-
-export const MOCK_USER: User = {
-  id: 'u1',
-  name: 'Jessica Doe (Parent of Alice)',
-  role: 'parent',
-  email: 'jessica@example.com',
-  enrolledClasses: ['c1_1', 'c_int_kt_1'], 
-};
-
-export const REHEARSAL_VIDEOS: Video[] = [
-  { id: 'v1', title: 'Tatkar Practice - Week 4', classId: 'c1', date: '2023-10-15', thumbnailUrl: 'https://picsum.photos/seed/kathak_vid1/400/300', duration: '2:15' },
-  { id: 'v2', title: 'Teen Taal Kaida', classId: 'c2', date: '2023-10-17', thumbnailUrl: 'https://picsum.photos/seed/kathak_vid2/400/300', duration: '1:45' },
-  { id: 'v3', title: 'Saraswati Vandana Rehearsal', classId: 'c1', date: '2023-10-22', thumbnailUrl: 'https://picsum.photos/seed/kathak_vid3/400/300', duration: '3:30' },
-];
-
-export const TUITION_ITEMS: TuitionItem[] = [
-  { id: 't1', description: 'October Tuition - Beginner Kids', amount: 95, dueDate: '2023-10-01', status: 'paid' },
-  { id: 't2', description: 'October Tuition - Intermediate Kids', amount: 95, dueDate: '2023-10-01', status: 'paid' },
-  { id: 't3', description: 'Recital Costume Deposit', amount: 75, dueDate: '2023-11-01', status: 'pending' },
-];
-
-export const EVENTS: CalendarEvent[] = [
-  { id: 'e1', title: 'Annual Recital Auditions', date: '2023-11-05', type: 'performance' },
-  { id: 'e2', title: 'Diwali Celebration', date: '2023-11-12', type: 'holiday' },
-  { id: 'e3', title: 'Winter Break', date: '2023-12-20', type: 'holiday' },
 ];
 
 // --- Class Display Categories ---

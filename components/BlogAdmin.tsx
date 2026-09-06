@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Bold,
+  CheckCircle2,
   Eye,
   Heading2,
   Italic,
@@ -41,6 +42,7 @@ export default function BlogAdmin({ accessCode }: { accessCode: string }) {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [saveConfirmation, setSaveConfirmation] = useState("");
   const [error, setError] = useState("");
   const [dirty, setDirty] = useState(false);
   const [preview, setPreview] = useState(false);
@@ -92,12 +94,14 @@ export default function BlogAdmin({ accessCode }: { accessCode: string }) {
     setDirty(false);
     setError("");
     setMessage("");
+    setSaveConfirmation("");
     setPreview(false);
   };
   const change = (patch: Partial<BlogPost>) => {
     setPost((current) => (current ? { ...current, ...patch } : current));
     setDirty(true);
     setMessage("");
+    setSaveConfirmation("");
   };
   const format = (before: string, after = "") => {
     const target = editor.current;
@@ -157,15 +161,18 @@ export default function BlogAdmin({ accessCode }: { accessCode: string }) {
     setBusy(true);
     setError("");
     setMessage("");
+    setSaveConfirmation("");
     try {
       const payload = { ...post, published };
       validatePost(payload);
       const result = await call({ action: "save_post", post: payload });
       setPost(result.post);
       setDirty(false);
-      setMessage(
+      setSaveConfirmation(
         published
-          ? "Your story is published."
+          ? post.published
+            ? "Changes saved. Your story is published."
+            : "Your story is published."
           : "Draft saved. This story is not visible to visitors.",
       );
       await load();
@@ -540,6 +547,19 @@ export default function BlogAdmin({ accessCode }: { accessCode: string }) {
                   </a>
                 </>
               )}
+              <p
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                className="w-full text-sm text-emerald-700"
+              >
+                {saveConfirmation && (
+                  <span className="inline-flex items-center gap-2">
+                    <CheckCircle2 size={18} aria-hidden="true" />
+                    {saveConfirmation}
+                  </span>
+                )}
+              </p>
             </div>
           </fieldset>
         </form>
