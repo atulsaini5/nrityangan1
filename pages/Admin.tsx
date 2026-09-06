@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CheckCircle2, ImageUp, Loader2, LockKeyhole, RefreshCw } from 'lucide-react';
+import { BookOpen, CheckCircle2, ClipboardList, ImageUp, Loader2, LockKeyhole, RefreshCw } from 'lucide-react';
 import BlogAdmin from '../components/BlogAdmin';
 
 type TrialRequest = {
@@ -21,6 +21,12 @@ const Admin: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
+  const [section, setSection] = useState<'requests' | 'photos' | 'journal'>('requests');
+  const sections = [
+    { id: 'requests' as const, label: 'Trial Class Requests', icon: ClipboardList },
+    { id: 'photos' as const, label: 'Upload Photos', icon: ImageUp },
+    { id: 'journal' as const, label: 'Journal', icon: BookOpen },
+  ];
 
   const callAdmin = async (body: Record<string, unknown>) => {
     const response = await fetch(endpoint, {
@@ -99,17 +105,27 @@ const Admin: React.FC = () => {
   );
 
   return (
-    <main className="min-h-screen bg-slate-100 p-4 md:p-8">
+    <div className="min-h-screen bg-slate-100 lg:flex">
+      <aside className="border-b border-slate-200 bg-white p-5 lg:sticky lg:top-0 lg:h-screen lg:w-64 lg:shrink-0 lg:border-b-0 lg:border-r lg:p-6">
+        <a href="/" className="font-serif text-2xl font-bold text-slate-900">Nrityangan<span className="text-rose-600">.</span></a>
+        <p className="mt-1 text-sm text-slate-500">Admin workspace</p>
+        <nav aria-label="Admin sections" className="mt-6 flex flex-col gap-2">
+          {sections.map(({ id, label, icon: Icon }) => <button key={id} type="button" aria-current={section === id ? 'page' : undefined} aria-controls={`admin-${id}`} onClick={() => setSection(id)} className={`flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold transition-colors ${section === id ? 'bg-rose-50 text-rose-700' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}><Icon size={20} aria-hidden="true" />{label}</button>)}
+        </nav>
+        <a href="/" className="mt-6 inline-block text-sm text-slate-500 hover:text-rose-700">← Back to website</a>
+      </aside>
+      <main className="min-w-0 flex-1 p-4 md:p-8">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div><h1 className="font-serif text-3xl font-bold text-slate-900">Nrityangan Admin</h1><p className="text-slate-500">Journal, trial requests and gallery uploads</p></div>
-          <button onClick={load} disabled={busy} className="flex items-center gap-2 rounded-xl bg-white px-4 py-2 shadow-sm"><RefreshCw size={17} /> Refresh</button>
+          <div><h1 className="font-serif text-3xl font-bold text-slate-900">{sections.find(item => item.id === section)?.label}</h1><p className="mt-1 text-slate-500">{section === 'journal' ? 'Create new blogs and edit your existing stories.' : section === 'photos' ? 'Add photos to your gallery albums.' : 'Manage enquiries and follow up with new students.'}</p></div>
+          {section !== 'journal' && <button onClick={load} disabled={busy} className="flex items-center gap-2 rounded-xl bg-white px-4 py-2 shadow-sm"><RefreshCw size={17} /> Refresh</button>}
         </div>
-        {message && <p className="mb-6 rounded-xl bg-white p-4 text-sm text-slate-700 shadow-sm">{message}</p>}
+        {message && section !== 'journal' && <p role="status" className="mb-6 rounded-xl bg-white p-4 text-sm text-slate-700 shadow-sm">{message}</p>}
 
-        <BlogAdmin accessCode={accessCode} />
+        {/* Keep each pane mounted so switching sections preserves unfinished edits and uploads. */}
+        <div id="admin-journal" hidden={section !== 'journal'}><BlogAdmin accessCode={accessCode} /></div>
 
-        <section className="mb-10 rounded-2xl bg-white p-5 shadow-sm">
+        <section id="admin-requests" hidden={section !== 'requests'} className="mb-10 rounded-2xl bg-white p-5 shadow-sm">
           <h2 className="mb-5 text-xl font-bold text-slate-900">Trial class requests</h2>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[1000px] text-left text-sm">
@@ -127,7 +143,7 @@ const Admin: React.FC = () => {
           </div>
         </section>
 
-        <section className="rounded-2xl bg-white p-5 shadow-sm">
+        <section id="admin-photos" hidden={section !== 'photos'} className="rounded-2xl bg-white p-5 shadow-sm">
           <div className="mb-5 flex items-center gap-3"><ImageUp className="text-rose-600"/><h2 className="text-xl font-bold text-slate-900">Upload gallery images</h2></div>
           <form onSubmit={upload} className="grid gap-4 md:grid-cols-2">
             <label className="text-sm font-medium text-slate-700">Existing album<select value={album} onChange={(event) => setAlbum(event.target.value)} disabled={!!newAlbum} className="mt-2 w-full rounded-xl border bg-white px-4 py-3"><option value="">Select album</option>{albums.map((name) => <option key={name}>{name}</option>)}</select></label>
@@ -137,7 +153,8 @@ const Admin: React.FC = () => {
           </form>
         </section>
       </div>
-    </main>
+      </main>
+    </div>
   );
 };
 
