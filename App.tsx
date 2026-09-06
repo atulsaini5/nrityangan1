@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
 import About from './pages/About';
 import Gallery from './pages/Gallery';
 import LandingPage from './pages/LandingPage';
 import Admin from './pages/Admin';
 import Blog from './pages/Blog';
-import { MOCK_USER, CLASSES, LOCATIONS, CLASS_CATEGORIES } from './constants';
-import { User, ClassSession } from './types';
+import { CLASSES, LOCATIONS, CLASS_CATEGORIES } from './constants';
+import { ClassSession } from './types';
 import { Clock, MapPin, Calendar as CalendarIcon } from 'lucide-react';
 
 // --- Helper ---
@@ -182,18 +181,7 @@ const useHashLocation = () => {
 };
 
 const App: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null);
   const currentPath = useHashLocation();
-
-  const handleLogin = () => {
-    // Mock login
-    setUser(MOCK_USER);
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    window.location.hash = '/';
-  };
 
   if (currentPath === '/admin') return <Admin />;
 
@@ -227,27 +215,14 @@ const App: React.FC = () => {
     case '/trial-class/thank-you':
       content = <LandingPage kind="trial-thank-you" />;
       break;
-    case '/dashboard':
-      content = user ? <Dashboard user={user} /> : <Home />;
-      break;
-    case '/videos':
-      content = user ? <Dashboard user={user} /> : <Home />;
-      break;
     default:
       content = /^\/blog(?:\/|$)/.test(currentPath)
         ? <Blog slug={currentPath.replace(/^\/blog\/?/, '').replace(/\/$/, '') || undefined} />
         : <Home />;
   }
 
-  // Handle redirects side-effect
-  useEffect(() => {
-    if ((currentPath === '/dashboard' || currentPath === '/videos') && !user) {
-      window.location.hash = '/';
-    }
-  }, [currentPath, user]);
-
   return (
-    <Layout isLoggedIn={!!user} onLogin={handleLogin} onLogout={handleLogout}>
+    <Layout>
       {content}
     </Layout>
   );
