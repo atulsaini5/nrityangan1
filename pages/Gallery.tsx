@@ -56,7 +56,7 @@ async function listObjects(prefix: string, offset = 0, limit = PAGE_SIZE, signal
   return items;
 }
 
-const Gallery: React.FC = () => {
+const Gallery: React.FC<{ albumNames?: string[]; embedded?: boolean }> = ({ albumNames, embedded = false }) => {
   const [collections, setCollections] = useState<GalleryCollection[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -124,6 +124,12 @@ const Gallery: React.FC = () => {
       }
 
       try {
+        if (albumNames) {
+          albums.current = albumNames;
+          setHasMore(albumNames.length > 0);
+          await loadMore();
+          return;
+        }
         const rootItems: StorageObject[] = [];
         let batch: StorageObject[];
         do {
@@ -145,7 +151,7 @@ const Gallery: React.FC = () => {
 
     loadGallery();
     return () => { cancelled = true; controller.abort(); pending.current?.abort(); pending.current = null; };
-  }, [loadMore, retry]);
+  }, [loadMore, retry, albumNames]);
 
   useEffect(() => {
     if (tab !== 'photos' || selectedUrl || loading || error || !hasMore || !sentinel.current || typeof IntersectionObserver === 'undefined') return;
@@ -200,20 +206,20 @@ const Gallery: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50">
-      <section className="bg-slate-900 px-4 py-16 text-center text-white">
+    <div className={embedded ? 'bg-stone-50' : 'min-h-screen bg-stone-50'}>
+      {!embedded && <section className="bg-slate-900 px-4 py-16 text-center text-white">
         <ImageIcon className="mx-auto mb-4 text-rose-400" size={36} />
         <h1 className="font-serif text-4xl font-bold">Gallery</h1>
         <p className="mx-auto mt-4 max-w-2xl text-slate-300">Moments from our performances, workshops, and Kathak community through the years.</p>
-      </section>
+      </section>}
 
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="mb-10 flex justify-center">
+      <div className={embedded ? '' : 'mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8'}>
+        {!embedded && <div className="mb-10 flex justify-center">
           <div className="inline-flex rounded-full border border-slate-200 bg-white p-1 shadow-sm">
             <button onClick={() => { setTab('photos'); setActiveVideoId(null); }} className={`flex items-center gap-2 rounded-full px-6 py-3 font-medium transition ${tab === 'photos' ? 'bg-rose-600 text-white shadow' : 'text-slate-600 hover:text-rose-600'}`}><ImageIcon size={18}/> Photos</button>
             <button onClick={() => setTab('videos')} className={`flex items-center gap-2 rounded-full px-6 py-3 font-medium transition ${tab === 'videos' ? 'bg-red-600 text-white shadow' : 'text-slate-600 hover:text-red-600'}`}><Youtube size={19}/> Videos</button>
           </div>
-        </div>
+        </div>}
         {tab === 'photos' && !loading && !error && collections.length === 0 && <p className="py-20 text-center text-slate-500">No gallery photos are available yet.</p>}
 
         {tab === 'photos' && <div className="space-y-14">

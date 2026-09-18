@@ -1,0 +1,14 @@
+[
+  {
+    "year": "2026",
+    "title": "Kathak Yatra",
+    "subtitle": "A night of celebration",
+    "description": "An enchanting showcase of Kathak dance, instruments, and vocals celebrating 26 years of dedication, learning, and performance.",
+    "poster": "/images/recitals/kathak-yatra-2026.webp",
+    "thumbnail": "/images/recitals/kathak-yatra-2026-small.webp",
+    "venue": "Bellevue Youth Theatre",
+    "highlights": ["Presentation of four taals", "Guest artist performances", "Semi-classical performances", "Celebrating our performers’ achievements"],
+    "photoAlbums": [],
+    "performancesFile": "/recitals/2026-performances.json"
+  }
+]
