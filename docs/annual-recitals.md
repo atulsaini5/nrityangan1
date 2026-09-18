@@ -19,7 +19,7 @@ The archive is `/recitals`; each year has a shareable `/recitals/2026` page. Des
 
 ## Content pending
 
-The provided poster says Sunday, August 27, 2026; that date is a Thursday. The original poster is preserved, but no structured date is published until the user confirms it. Artist URLs and photo album names have not been supplied, so 2026's collections are currently empty.
+The user confirmed Sunday, September 27, 2026. The page displays that date and uses only the upper poster artwork so the old printed date is not shown. The archive, gallery and performances show Coming Soon. Artist URLs and photo album names are pending. Set `comingSoon` to false when the year is ready to publish its media; until then no media lists or players are loaded.
 
 ## Rollout / recovery
 

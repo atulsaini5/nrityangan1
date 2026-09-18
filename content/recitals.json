@@ -7,8 +7,16 @@
     "poster": "/images/recitals/kathak-yatra-2026.webp",
     "thumbnail": "/images/recitals/kathak-yatra-2026-small.webp",
     "venue": "Bellevue Youth Theatre",
-    "highlights": ["Presentation of four taals", "Guest artist performances", "Semi-classical performances", "Celebrating our performers’ achievements"],
+    "highlights": [
+      "Presentation of four taals",
+      "Guest artist performances",
+      "Semi-classical performances",
+      "Celebrating our performers’ achievements"
+    ],
     "photoAlbums": [],
-    "performancesFile": "/recitals/2026-performances.json"
+    "performancesFile": "/recitals/2026-performances.json",
+    "date": "2026-09-27",
+    "dateLabel": "Sunday, September 27, 2026",
+    "comingSoon": true
   }
 ]
