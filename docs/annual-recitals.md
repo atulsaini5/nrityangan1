@@ -19,6 +19,14 @@ The archive is `/recitals`; each year has a shareable `/recitals/2026` page. Des
 
 ## Content pending
 
+### 2025 archive
+
+The 2025 page uses the supplied `2025 Recital` folder: nine photographs, the announcement PNG/PDF, and the two program spreads from the ZIP. The program confirms September 21, 2025, 5–9 PM, Bellevue Youth Theatre. Program milestones and guest artists are transcribed from the provided spreads; the full spreads and generated PDF preserve the complete performer list. No individual artist video links were supplied.
+
+Photos have EXIF orientation applied, metadata removed, 320/640px WebP thumbnails and a maximum 1800px full view. The gallery fetches only its manifest initially, lazy-loads responsive thumbnails, renders up to 24 at a time and requests full images only when opening the keyboard-accessible native dialog. Program images load only when that section is selected. Assets are local static files; there are no new Storage writes or schema changes.
+
+The user confirmed that the promo in this folder belongs to **2026**, matching the September 27 date printed in the video. It appears on the 2026 page alongside its Coming Soon photo/performance areas. The 27.75-second H.264/AAC video was compressed from 25.4 MB to 13.6 MB, resized to 1280px and made fast-start; no video element or MP4 request exists before pressing Play. The promo is not placed on the 2025 page.
+
 The user confirmed Sunday, September 27, 2026. The page displays that date and uses only the upper poster artwork so the old printed date is not shown. The archive, gallery and performances show Coming Soon. Artist URLs and photo album names are pending. Set `comingSoon` to false when the year is ready to publish its media; until then no media lists or players are loaded.
 
 ## Rollout / recovery

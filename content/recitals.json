@@ -17,6 +17,40 @@
     "performancesFile": "/recitals/2026-performances.json",
     "date": "2026-09-27",
     "dateLabel": "Sunday, September 27, 2026",
-    "comingSoon": true
+    "comingSoon": true,
+    "promo": {
+      "src": "/recitals/2026/promo-sep27.mp4",
+      "poster": "/images/recitals/2026-promo-poster.webp"
+    }
+  },
+  {
+    "year": "2025",
+    "title": "Kathak Annual Recital",
+    "subtitle": "Celebrating 25 years of Nrityangan",
+    "description": "An evening of Kathak dance, instruments and vocals celebrating 25 years of dedication, learning and performance, with grade exams, guest artists and an award ceremony.",
+    "poster": "/images/recitals/2025/announcement.webp",
+    "thumbnail": "/images/recitals/2025/photo-09-640.webp",
+    "venue": "Bellevue Youth Theatre",
+    "highlights": [
+      "Classical and semi-classical Kathak performances",
+      "Guest artists: tabla, sarod, sitar, flute and classical vocals",
+      "Grade exams and demonstrations",
+      "Celebrating our performers’ achievements"
+    ],
+    "photoAlbums": [],
+    "performancesFile": "/recitals/2025-performances.json",
+    "date": "2025-09-21",
+    "dateLabel": "Sunday, September 21, 2025",
+    "comingSoon": false,
+    "time": "5:00–9:00 PM",
+    "archive": {
+      "photosFile": "/recitals/2025-photos.json",
+      "programPdf": "/recitals/2025/program.pdf",
+      "programPages": [
+        "/images/recitals/2025/program-1.webp",
+        "/images/recitals/2025/program-2.webp"
+      ],
+      "announcementPdf": "/recitals/2025/announcement.pdf"
+    }
   }
 ]

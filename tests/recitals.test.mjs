@@ -24,5 +24,16 @@ test('every published recital has unique year, existing assets and valid artist 
     for (const asset of [row.poster, row.thumbnail]) assert.ok(readFileSync(new URL(`../public${asset}`, import.meta.url)).length);
     readPerformances(JSON.parse(readFileSync(new URL(`../public${row.performancesFile}`, import.meta.url))));
     assert.ok(Array.isArray(row.photoAlbums));
+    if (row.promo) {
+      for (const asset of [row.promo.src, row.promo.poster]) assert.ok(readFileSync(new URL(`../public${asset}`, import.meta.url)).length);
+    }
+    if (row.archive) {
+      for (const asset of [row.archive.programPdf, row.archive.announcementPdf, ...row.archive.programPages]) assert.ok(readFileSync(new URL(`../public${asset}`, import.meta.url)).length);
+      const photos = JSON.parse(readFileSync(new URL(`../public${row.archive.photosFile}`, import.meta.url)));
+      for (const photo of photos) {
+        assert.ok(photo.alt && photo.width > 0 && photo.height > 0);
+        for (const asset of [photo.src, photo.thumbnail, photo.small]) assert.ok(readFileSync(new URL(`../public${asset}`, import.meta.url)).length);
+      }
+    }
   }
 });
