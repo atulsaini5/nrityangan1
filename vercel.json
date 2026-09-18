@@ -34,6 +34,7 @@
     "api/journal.mjs": { "includeFiles": "{dist/blog-shell.html,dist-ssr/**}" }
   },
   "rewrites": [
+    { "source": "/recitals/:path*", "destination": "/index.html" },
     { "source": "/admin", "destination": "/index.html" },
     { "source": "/blog", "destination": "/api/journal" },
     { "source": "/blog/:slug*", "destination": "/api/journal?slug=:slug*" },
