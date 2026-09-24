@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArrowLeft, ArrowUpRight, CalendarDays, ChevronDown, Clock, MapPin, QrCode, Star, Users } from 'lucide-react';
 import recitals from '../content/recitals.json';
 import { type Agenda, type AgendaItem, readAgenda } from '../lib/agenda';
+import AgendaCorrectionForm from '../components/AgendaCorrectionForm';
 
 const agendas = import.meta.glob('../content/agendas/*.json', { import: 'default' });
 const reviewUrl = 'https://g.page/r/CdgMmjtVLvLMEAI/review';
@@ -94,6 +95,7 @@ export default function RecitalAgenda({ year }: { year: string }) {
         <img src={`/recitals/${year}/agenda-qr.svg`} width="144" height="144" alt={`QR code for the ${year} recital agenda`} className="shrink-0"/>
         <div><h2 id="share-agenda" className="flex items-center gap-2 font-serif text-2xl"><QrCode size={20} aria-hidden="true"/>Share the evening</h2><p className="mt-2 text-sm leading-relaxed text-stone-600">Scan to open this program on another phone.</p><a href={`/recitals/${year}/agenda-qr.png`} download className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-rose-800 underline underline-offset-4">Download QR code</a></div>
       </section>
+      {agenda && <AgendaCorrectionForm key={year} agenda={agenda}/>}
     </div>
   </div>;
 }

@@ -46,3 +46,21 @@ The user confirmed Sunday, September 27, 2026. The page displays that date and u
 Repository: `atulsaini5/nrityangan1`. Existing website target documented in `blog-rollout.md`: Vercel `nrityangan`, domain `www.kathakseattle.com`. Confirm live mapping before deployment. No new environment variables, database migrations, storage buckets, policies, or backend functions. Existing public gallery reads use `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` and its existing optimizer allowlist.
 
 Run `npm test` and `npm run build`. Verify `/recitals`, `/recitals/2026`, unknown years, mobile navigation, photo paging, video search, direct links, and click-to-play with local media fixtures. Roll back the frontend deployment to the preceding version; keep existing uploaded photographs.
+# Participant corrections
+
+Each year's agenda includes a correction form after the QR section. Requests go
+through the `agenda-correction` Supabase Edge Function to `at@teamevents.ai`, using
+the existing `SENDGRID_API_KEY` and sender `support@teamevents.ai`. No new secrets
+or database migrations are required. Requests are emailed for manual review;
+they never directly change the roster. Contact email is optional.
+
+Deploy the function with JWT verification enabled before deploying the frontend.
+Only the two production kathakseattle.com origins are accepted. Validation,
+a honeypot, bounded request size and best-effort per-instance throttling limit
+abuse; throttling is not durable across edge instances. Success requires SendGrid
+to accept the email (202), not proof of inbox delivery. Participant data is not
+logged or stored by the function.
+
+Recovery: roll Vercel back to deployment `DCmpRxCZ3gbA4JHs7r9gVera9CBJ`
+(commit `8c47612`) to remove the form. The dedicated function can then be disabled
+without affecting trial-class emails. No environment variables are changed.
