@@ -3,42 +3,325 @@
   "time": "4:30–9:00 pm",
   "sections": [
     {
-      "id": "first-half", "title": "First Half", "time": "4:30–6:00 pm", "description": "Kathak performances",
+      "id": "first-half",
+      "title": "First Half",
+      "time": "4:30–6:00 pm",
+      "description": "Kathak performances",
       "items": [
-        { "id": "harmonium-tabla", "title": "Harmonium and Tabla", "participants": [] },
-        { "id": "ganesh-vandana", "number": "1", "title": "Ganesh Vandana Teentaal Kids Entry", "participants": [] },
-        { "id": "ektaal", "number": "2", "title": "Ektaal with Vishnu Vandana", "participants": [] },
-        { "id": "teentaal", "number": "3", "title": "Teentaal Drut with Tabla", "participants": [] },
-        { "id": "pancham-sawari", "number": "4", "title": "Pancham Sawari Part 1", "participants": [] },
-        { "id": "jhaaptaal", "number": "5", "title": "Taal Jhaaptaal", "participants": [] },
-        { "id": "pancham-finale", "number": "6", "title": "Pancham Sawari Finalle 6", "participants": [] },
-        { "id": "bollykathak", "number": "7", "title": "Bollykathak Medley", "participants": [] },
-        { "id": "taal-basant", "number": "8", "title": "Taal Basant Chandrayee", "participants": [] }
+        {
+          "id": "harmonium-tabla",
+          "title": "Harmonium and Tabla",
+          "participants": [
+            "Shreeja Bramhanwade",
+            "Shlok Bramhanwade"
+          ]
+        },
+        {
+          "id": "ganesh-vandana",
+          "number": "1",
+          "title": "Ganesh Vandana Teentaal Kids Entry",
+          "participants": [
+            "Nitya Kumar",
+            "Navika Kumar",
+            "Esha Chatterjee",
+            "Aarohi Khanna",
+            "Inaya Arora",
+            "Dhwani Rao",
+            "Nyra Bathula",
+            "Norah Kumar",
+            "Samaira Shah",
+            "Sachi Poothia",
+            "Viha Khadloya"
+          ]
+        },
+        {
+          "id": "ektaal",
+          "number": "2",
+          "title": "Ektaal with Vishnu Vandana",
+          "participants": [
+            "Anika Gupta",
+            "Ishaani Raj",
+            "Ishika Raj",
+            "Ira Chaudhary",
+            "Shyla Kumar",
+            "Annapurna Awasthi",
+            "Kinjal Abhishek Vaishnav",
+            "Madhavi S Viswanadha",
+            "Mokshvi Shah",
+            "Nirvi Shah",
+            "Payal Shah",
+            "Raya Awasthi",
+            "Yashika Seth",
+            "Shanti Kemburu",
+            "Shipra Baranwal",
+            "Priya Bhardwaj",
+            "Poorva Arankalle",
+            "Manasi Mankame Joshi"
+          ]
+        },
+        {
+          "id": "teentaal",
+          "number": "3",
+          "title": "Teentaal Drut with Tabla",
+          "participants": [
+            "Iram Ahmad",
+            "Smitha Radhakrishna",
+            "Arya Shankar",
+            "Samruddhi Sandeep",
+            "Poorva Arankalle"
+          ]
+        },
+        {
+          "id": "pancham-sawari",
+          "number": "4",
+          "title": "Pancham Sawari Part 1",
+          "participants": [
+            "Siddhi Murkuri",
+            "Mayuri Mahesh Dekate",
+            "Navya Thareja",
+            "Shreeja Bramhanwade",
+            "Hiral Milind Khadloya",
+            "Rachel Heilman",
+            "Amrutha Prakash Veena",
+            "Ananya Akurathi",
+            "Anvi Apurva Chinchwadkar",
+            "Ariana Singhal",
+            "Ashmi Shah",
+            "Alina Shah",
+            "Auditri Das",
+            "HArshika Goyal",
+            "Suman Iyanger Chatterjee",
+            "Neha Bhuta",
+            "Nidhi Pasrija",
+            "Ronak Mody",
+            "Sirisha Donepudi",
+            "Suhani Sood"
+          ]
+        },
+        {
+          "id": "jhaaptaal",
+          "number": "5",
+          "title": "Taal Jhaaptaal",
+          "participants": [
+            "Nirvi Shah",
+            "Payal Shah",
+            "Shipra Baranwal",
+            "Yashika Seth",
+            "Annapurna Awasthi",
+            "Kinjal Abhishek Vaishnav",
+            "Shanti Kemburu",
+            "Shyla Kumar"
+          ]
+        },
+        {
+          "id": "pancham-finale",
+          "number": "6",
+          "title": "Pancham Sawari Part 2",
+          "participants": [
+            "Siddhi Murkuri",
+            "Neha Murkuri",
+            "Mayuri Mahesh Dekate",
+            "Navya Thareja",
+            "Shreeja Bramhanwade",
+            "Hiral Milind Khadloya",
+            "Rachel Heilman",
+            "Amrutha Prakash Veena",
+            "Ananya Akurathi",
+            "Anvi Apurva Chinchwadkar",
+            "Ariana Singhal",
+            "Ashmi Shah",
+            "Alina Shah",
+            "Auditri Das",
+            "HArshika Goyal",
+            "Suman Iyanger Chatterjee",
+            "Neha Bhuta",
+            "Nidhi Pasrija",
+            "Ronak Mody",
+            "Sirisha Donepudi",
+            "Suhani Sood",
+            "Yamini Bhatt",
+            "Anjali Arya",
+            "Ridhima Sarkar",
+            "Aadya Ojha"
+          ]
+        },
+        {
+          "id": "bollykathak",
+          "number": "7",
+          "title": "Bollykathak Medley",
+          "participants": [
+            "Ashwini Gore",
+            "Mita Pandya",
+            "aditi Jain",
+            "Meghna Bansal"
+          ]
+        },
+        {
+          "id": "mastani",
+          "number": "8",
+          "title": "Mastani Mix",
+          "participants": [
+            "Mayuri",
+            "Nidhi Pasrija",
+            "Sirisha Donepudi",
+            "Siddhi Murkuri",
+            "Amrutha Prakash Veena"
+          ]
+        },
+        {
+          "id": "taal-basant",
+          "number": "9",
+          "title": "Taal Basant",
+          "participants": [
+            "Chandryaee Bhattacharyya"
+          ]
+        }
       ]
     },
-    { "id": "dinner", "title": "Dinner", "time": "6:00–6:45 pm", "items": [] },
     {
-      "id": "guest-performances", "title": "Second Half — Guest Performances", "time": "6:45–7:30 pm",
+      "id": "dinner",
+      "title": "Dinner",
+      "time": "6:00–6:45 pm",
+      "items": []
+    },
+    {
+      "id": "guest-performances",
+      "title": "Second Half — Guest Performances",
+      "time": "6:45–7:30 pm",
       "items": [
-        { "id": "mohe-rang-do", "title": "Mohe Rang Do — Kathak with Live Singing", "participants": [] },
-        { "id": "sarangi-tabla", "title": "Sarangi and Tabla", "participants": [] },
-        { "id": "vocals", "title": "Vocals", "participants": [] }
+        {
+          "id": "mohe-rang-do",
+          "title": "Mohe Rang Do — Kathak with Live Singing",
+          "participants": [
+            "Singer: Sanket",
+            "Singer: Priya",
+            "Tabla: Supratik Chatterjee",
+            "Sarangi: Arya Bhat",
+            "Ashmi Shah",
+            "Elina Shah",
+            "Suman Iyanger Chatterjee",
+            "Sirisha Donepudi",
+            "Siddhi Murkuri",
+            "Amrutha Prakash Veena",
+            "Mayuri Mahesh Dekate",
+            "Rachel Heilman"
+          ],
+          "number": "10"
+        },
+        {
+          "id": "sarangi-tabla",
+          "title": "Sarangi and Tabla",
+          "participants": []
+        },
+        {
+          "id": "vocals",
+          "title": "Vocals",
+          "participants": []
+        }
       ]
     },
     {
-      "id": "semi-classical", "title": "Semi-Classical Kathak", "time": "7:30–8:30 pm",
+      "id": "semi-classical",
+      "title": "Semi-Classical Kathak",
+      "time": "7:30–8:30 pm",
       "items": [
-        { "id": "kanha", "number": "1", "title": "Kanha — Friday Batch", "participants": [] },
-        { "id": "payalia", "number": "2", "title": "Payalia — Redmond Kids", "participants": [] },
-        { "id": "mastani", "number": "3", "title": "Mastani Mix", "participants": [] },
-        { "id": "piya-tose", "number": "4", "title": "Piya Tose Naina Lage", "participants": [] },
-        { "id": "dhurandhar", "number": "5", "title": "Dhurandhar Mix", "participants": [] },
-        { "id": "barso-re", "number": "6", "title": "Barso Re", "participants": [] },
-        { "id": "ore-piya", "number": "7", "title": "Ore Piya", "participants": [] },
-        { "id": "bandish-bandit", "number": "8", "title": "Bandish Bandit Kathak Fusion", "participants": [] },
-        { "id": "apsara", "number": "9", "title": "Apsara Fusion", "participants": [] }
+        {
+          "id": "kanha",
+          "number": "11",
+          "title": "Kanha",
+          "participants": [
+            "Anika Gupta",
+            "Ishaani Raj",
+            "Ishika Raj",
+            "Ira Chaudhary",
+            "Shyla Kumar",
+            "Mokshvi Shah",
+            "Nirvi Shah"
+          ]
+        },
+        {
+          "id": "payalia",
+          "number": "12",
+          "title": "Payalia — Redmond Kids",
+          "participants": [
+            "Nitya Kumar",
+            "Navika Kumar",
+            "Esha Chatterjee",
+            "Aarohi Khanna",
+            "Inaya Arora",
+            "Dhwani Rao",
+            "Nyra Bathula",
+            "Sachi Poothia"
+          ]
+        },
+        {
+          "id": "dhurandhar",
+          "number": "13",
+          "title": "Dhurandhar Mix",
+          "participants": [
+            "Nirvi Shah",
+            "Payal Shah",
+            "Shipra Baranwal",
+            "Yashika Seth",
+            "Annapurna Awasthi",
+            "Kinjal Abhishek Vaishnav",
+            "Shanti Kemburu",
+            "Shyla Kumar"
+          ]
+        },
+        {
+          "id": "piya-tose",
+          "number": "14",
+          "title": "Piya Tose Naina Lage",
+          "participants": [
+            "Anvi Chinchwadkar",
+            "Shreeja"
+          ]
+        },
+        {
+          "id": "barso-re",
+          "number": "15",
+          "title": "Barso Re",
+          "participants": [
+            "Siddhi Murkuri",
+            "Neha Mrukuri"
+          ]
+        },
+        {
+          "id": "ore-piya",
+          "number": "16",
+          "title": "Ore Piya",
+          "participants": [
+            "Suman Iyengar Chatterjee",
+            "Anjali Arya"
+          ]
+        },
+        {
+          "id": "bandish-bandit",
+          "number": "17",
+          "title": "Bandish Bandit Kathak Fusion",
+          "participants": [
+            "Elena Shah",
+            "Ashmi Shah"
+          ]
+        },
+        {
+          "id": "apsara",
+          "number": "18",
+          "title": "Apsara Fusion",
+          "participants": [
+            "Mayuri Mahesh Dekate",
+            "Sirisha Donepudi",
+            "Nidhi Pasrija"
+          ]
+        }
       ]
     },
-    { "id": "awards", "title": "Award Ceremony", "time": "8:30–9:00 pm", "items": [] }
+    {
+      "id": "awards",
+      "title": "Award Ceremony",
+      "time": "8:30–9:00 pm",
+      "items": []
+    }
   ]
 }

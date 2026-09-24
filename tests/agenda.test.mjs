@@ -11,10 +11,15 @@ test('updated 2026 program preserves all five time blocks and 21 performances', 
   const agenda = readAgenda(program, '2026');
   assert.deepEqual(agenda.sections.map(section => section.time), ['4:30–6:00 pm', '6:00–6:45 pm', '6:45–7:30 pm', '7:30–8:30 pm', '8:30–9:00 pm']);
   assert.equal(agenda.sections.flatMap(section => section.items).length, 21);
-  assert.equal(agenda.sections[0].items.at(-1).title, 'Taal Basant Chandrayee');
+  assert.equal(agenda.sections[0].items.at(-1).title, 'Taal Basant');
+  assert.equal(agenda.sections[0].items.at(-2).title, 'Mastani Mix');
   assert.match(agenda.sections[2].items[0].title, /^Mohe Rang Do/);
   assert.deepEqual(agenda.sections[3].items.slice(-3).map(item => item.title), ['Ore Piya', 'Bandish Bandit Kathak Fusion', 'Apsara Fusion']);
-  assert.ok(agenda.sections.flatMap(section => section.items).every(item => item.participants.length === 0));
+  const numbered = agenda.sections.flatMap(section => section.items).filter(item => item.number);
+  assert.deepEqual(numbered.map(item => Number(item.number)), Array.from({ length: 18 }, (_, i) => i + 1));
+  assert.ok(numbered.every(item => item.participants.length > 0));
+  assert.ok(numbered.every(item => new Set(item.participants).size === item.participants.length));
+  assert.equal(agenda.sections[0].items[0].participants.length, 2);
 });
 
 test('each published yearly agenda has valid content and QR assets', () => {
