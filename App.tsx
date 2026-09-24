@@ -11,6 +11,7 @@ import { ClassSession } from './types';
 import { Clock, MapPin, Calendar as CalendarIcon } from 'lucide-react';
 
 const Recitals = lazy(() => import('./pages/Recitals'));
+const RecitalAgenda = lazy(() => import('./pages/RecitalAgenda'));
 
 // --- Helper ---
 const formatTime = (time: string) => {
@@ -218,7 +219,9 @@ const App: React.FC = () => {
       content = <LandingPage kind="trial-thank-you" />;
       break;
     default:
-      content = /^\/recitals(?:\/|$)/.test(currentPath)
+      content = /^\/recitals\/\d{4}\/agenda\/?$/.test(currentPath)
+        ? <Suspense fallback={<p role="status" className="p-12">Loading agenda...</p>}><RecitalAgenda year={currentPath.split('/')[2]}/></Suspense>
+        : /^\/recitals(?:\/|$)/.test(currentPath)
         ? <Suspense fallback={<p role="status" className="p-12">Loading recitals...</p>}><Recitals year={currentPath.replace(/^\/recitals\/?/, '').replace(/\/$/, '') || undefined}/></Suspense>
         : /^\/blog(?:\/|$)/.test(currentPath)
         ? <Blog slug={currentPath.replace(/^\/blog\/?/, '').replace(/\/$/, '') || undefined} />

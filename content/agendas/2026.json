@@ -1,0 +1,44 @@
+{
+  "year": "2026",
+  "time": "4:30–9:00 pm",
+  "sections": [
+    {
+      "id": "first-half", "title": "First Half", "time": "4:30–6:00 pm", "description": "Kathak performances",
+      "items": [
+        { "id": "harmonium-tabla", "title": "Harmonium and Tabla", "participants": [] },
+        { "id": "ganesh-vandana", "number": "1", "title": "Ganesh Vandana Teentaal Kids Entry", "participants": [] },
+        { "id": "ektaal", "number": "2", "title": "Ektaal with Vishnu Vandana", "participants": [] },
+        { "id": "teentaal", "number": "3", "title": "Teentaal Drut with Tabla", "participants": [] },
+        { "id": "pancham-sawari", "number": "4", "title": "Pancham Sawari Part 1", "participants": [] },
+        { "id": "jhaaptaal", "number": "5", "title": "Taal Jhaaptaal", "participants": [] },
+        { "id": "pancham-finale", "number": "6", "title": "Pancham Sawari Finalle 6", "participants": [] },
+        { "id": "bollykathak", "number": "7", "title": "Bollykathak Medley", "participants": [] },
+        { "id": "taal-basant", "number": "8", "title": "Taal Basant Chandrayee", "participants": [] }
+      ]
+    },
+    { "id": "dinner", "title": "Dinner", "time": "6:00–6:45 pm", "items": [] },
+    {
+      "id": "guest-performances", "title": "Second Half — Guest Performances", "time": "6:45–7:30 pm",
+      "items": [
+        { "id": "mohe-rang-do", "title": "Mohe Rang Do — Kathak with Live Singing", "participants": [] },
+        { "id": "sarangi-tabla", "title": "Sarangi and Tabla", "participants": [] },
+        { "id": "vocals", "title": "Vocals", "participants": [] }
+      ]
+    },
+    {
+      "id": "semi-classical", "title": "Semi-Classical Kathak", "time": "7:30–8:30 pm",
+      "items": [
+        { "id": "kanha", "number": "1", "title": "Kanha — Friday Batch", "participants": [] },
+        { "id": "payalia", "number": "2", "title": "Payalia — Redmond Kids", "participants": [] },
+        { "id": "mastani", "number": "3", "title": "Mastani Mix", "participants": [] },
+        { "id": "piya-tose", "number": "4", "title": "Piya Tose Naina Lage", "participants": [] },
+        { "id": "dhurandhar", "number": "5", "title": "Dhurandhar Mix", "participants": [] },
+        { "id": "barso-re", "number": "6", "title": "Barso Re", "participants": [] },
+        { "id": "ore-piya", "number": "7", "title": "Ore Piya", "participants": [] },
+        { "id": "bandish-bandit", "number": "8", "title": "Bandish Bandit Kathak Fusion", "participants": [] },
+        { "id": "apsara", "number": "9", "title": "Apsara Fusion", "participants": [] }
+      ]
+    },
+    { "id": "awards", "title": "Award Ceremony", "time": "8:30–9:00 pm", "items": [] }
+  ]
+}
