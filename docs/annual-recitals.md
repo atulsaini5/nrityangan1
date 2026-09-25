@@ -4,6 +4,18 @@ The archive is `/recitals`; each year has a shareable `/recitals/2026` page. Des
 
 ## Add a year or media
 
+### Interactive audience agendas
+
+The 2026 audience program is `/recitals/2026/agenda`, linked from its recital page even while photos/videos are Coming Soon. The review invitation links directly to the studio's supplied Google review URL. All 21 performances and five time blocks follow `Kathak_Yatra_2026_Recital_Agenda (2).docx`. Performances 1–18 are matched to the numbered first-row columns in the `Classical Performances` tab of `2026 Recital Participants.xlsx`, regardless of header title differences. The unnumbered Tabla and Harmonium column supplies the opening duet. Blank cells are skipped, surrounding whitespace is trimmed, and six exact repeated entries within individual columns are removed. Supplied spellings and musician roles are preserved. The program contains 145 performer entries across 19 populated items; separate Sarangi and Tabla and Vocals rosters remain pending.
+
+Each performance is a keyboard-accessible disclosure with an empty-state message when names have not been supplied. To update a roster, edit its `participants` array in `content/agendas/2026.json`, for example `"participants": ["Name One", "Name Two"]`. Names render as plain text. Keep item IDs stable when reordering or renumbering performances and include only names intended for the public program. Commit and redeploy; the audience URL and printed QR code stay unchanged.
+
+For another year, add the recital metadata, set `agenda: true`, and create `content/agendas/YYYY.json` using the same schema (`year`, `time`, and `sections`, with stable unique IDs). The page automatically loads that year's file. Include that year's `public/recitals/YYYY/agenda-qr.svg` and `.png`, encoding `https://www.kathakseattle.com/recitals/YYYY/agenda`. Keep old years' files in place. The QR assets use black modules on white with a four-module quiet zone; preserve that border when printing. No external QR service, account, expiration, database, or environment variables are involved.
+
+The checked-in agenda tests validate unique IDs, correct year isolation, participant arrays, published assets, and the updated 2026 sequence. Use the existing build and test scripts. Browser checks should cover disclosure controls, Expand/Collapse all, narrow layouts, section jump links, review-link destination, and unavailable years.
+
+Deployment recovery: restore Vercel deployment `6wHWad4C7fzbrNG6NEVDkzCxnUNn` (commit `915bb2f2ec7e3be25547d23d105da077112fda2a`) to revert the schedule and roster update to the initial agenda release. No Supabase migrations or environment changes are required.
+
 1. Add an entry to `content/recitals.json` with a unique four-digit `year`, title, subtitle, description, venue, highlights, poster and thumbnail paths, `photoAlbums`, and `performancesFile`. Only published years belong in this file; do not put private draft information in public assets.
 2. Upload recital photographs through the existing `/admin` → **Upload Photos**. Create a distinct album such as `2026-Kathak-Yatra`. Set that exact album name in the year's `photoAlbums` array. Several album names are supported in the desired order. Photos in other albums are never included automatically. The existing gallery upload and Storage policies are unchanged.
 3. Create `public/recitals/2026-performances.json` (substitute the new year), containing an array of `{ "artist": "Artist name", "title": "Performance title", "youtubeUrl": "https://www.youtube.com/watch?v=VIDEO_ID" }`. Use real artist names and actual public video links. Group performances can list the group or multiple artists. Run `npm test` to validate links and assets.
@@ -34,3 +46,33 @@ The user confirmed Sunday, September 27, 2026. The page displays that date and u
 Repository: `atulsaini5/nrityangan1`. Existing website target documented in `blog-rollout.md`: Vercel `nrityangan`, domain `www.kathakseattle.com`. Confirm live mapping before deployment. No new environment variables, database migrations, storage buckets, policies, or backend functions. Existing public gallery reads use `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` and its existing optimizer allowlist.
 
 Run `npm test` and `npm run build`. Verify `/recitals`, `/recitals/2026`, unknown years, mobile navigation, photo paging, video search, direct links, and click-to-play with local media fixtures. Roll back the frontend deployment to the preceding version; keep existing uploaded photographs.
+# Participant corrections
+
+Each year's agenda includes a correction form after the QR section. Requests go
+through the `agenda-correction` Supabase Edge Function to `at@teamevents.ai`, using
+the direct Twilio Email API (`https://comms.twilio.com/v1/Emails`) and sender
+`support@teamevents.ai`. Configure server-only `TWILIO_ACCOUNT_SID` and
+`TWILIO_AUTH_TOKEN` in Supabase Edge Function secrets before deploying this
+version. Never add these credentials to Vite variables or source files.
+No database migrations are required. Requests are emailed for manual review;
+they never directly change the roster. Contact email is optional.
+
+Deploy the function with JWT verification enabled before deploying the frontend.
+Only the two production kathakseattle.com origins are accepted. Validation,
+a honeypot, bounded request size and best-effort per-instance throttling limit
+abuse; throttling is not durable across edge instances. Success requires Twilio
+to accept the email (202), not proof of inbox delivery. Participant data is not
+logged or stored by the function.
+
+Recovery: roll Vercel back to deployment `DCmpRxCZ3gbA4JHs7r9gVera9CBJ`
+(commit `8c47612`) to remove the form. The dedicated function can then be disabled
+without affecting trial-class emails. The trial-class endpoint still uses its
+existing SendGrid integration and is outside this change's scope.
+
+The direct Twilio Email product is distinct from the legacy SendGrid endpoint.
+On September 24, the signed-in Twilio account had email allowance remaining and
+accepted a console test from support@teamevents.ai to at@teamevents.ai, while
+the legacy SendGrid key returned a credits-related rejection. Do not infer the
+Twilio account balance from that legacy error. The optional visitor contact email
+is included in the message body for manual follow-up. Visitor text is passed as
+a Liquid variable and escaped in HTML, never concatenated into template code.

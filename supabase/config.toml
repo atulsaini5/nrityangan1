@@ -9,3 +9,6 @@ verify_jwt = false
 
 [functions.blog]
 verify_jwt = false
+
+[functions.agenda-correction]
+verify_jwt = true
