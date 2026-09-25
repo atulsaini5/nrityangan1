@@ -59,7 +59,15 @@ export function createCorrectionHandler({ apiKey, send = fetch, now = Date.now }
           content: [{ type: 'text/plain', value: `A visitor requested a participant correction. Please review before changing the agenda.\n\nRecital: ${year}\nPerformance: ${performance}\nParticipant: ${participant}\nRequested correction:\n${correction}\n\nContact email: ${email || 'Not provided'}\nAgenda: https://www.kathakseattle.com/recitals/${year}/agenda` }],
         }),
       });
-      if (response.status !== 202) return reply(502, 'Unable to send email. Please try again.');
+      if (response.status !== 202) {
+        // Log only provider status and known configuration categories, never the
+        // submitted names, message, credentials, or raw provider response.
+        const details = (await response.text()).toLowerCase();
+        const reason = details.includes('credits') ? 'credits' : details.includes('verified sender') ? 'sender-verification' :
+          details.includes('authorization') || details.includes('api key') ? 'credentials' : 'provider-rejection';
+        console.error('agenda-correction email rejected', response.status, reason);
+        return reply(502, 'Unable to send email. Please try again.');
+      }
       return reply(200);
     } catch { return reply(502, 'Unable to send email. Please try again.'); }
   };
