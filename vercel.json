@@ -17,6 +17,10 @@
   },
   "headers": [
     {
+      "source": "/communication-preferences",
+      "headers": [{ "key": "Referrer-Policy", "value": "no-referrer" }, { "key": "X-Robots-Tag", "value": "noindex" }]
+    },
+    {
       "source": "/blog-shell.html",
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
     },
@@ -34,6 +38,10 @@
     "api/journal.mjs": { "includeFiles": "{dist/blog-shell.html,dist-ssr/**}" }
   },
   "rewrites": [
+    { "source": "/enroll", "destination": "/index.html" },
+    { "source": "/enrollment-privacy", "destination": "/index.html" },
+    { "source": "/communication-terms", "destination": "/index.html" },
+    { "source": "/communication-preferences", "destination": "/index.html" },
     { "source": "/recitals/:path*", "destination": "/index.html" },
     { "source": "/admin", "destination": "/index.html" },
     { "source": "/blog", "destination": "/api/journal" },
