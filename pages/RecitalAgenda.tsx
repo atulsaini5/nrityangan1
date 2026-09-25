@@ -29,15 +29,33 @@ export default function RecitalAgenda({ year }: { year: string }) {
   const loader = recital?.agenda ? agendas[`../content/agendas/${year}.json`] : undefined;
   const [agenda, setAgenda] = useState<Agenda | null>(null);
   const [error, setError] = useState('');
+  const [savedCopy, setSavedCopy] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   useEffect(() => {
     let active = true;
-    setAgenda(null); setError(''); setExpanded(new Set());
-    if (loader) loader().then(data => { if (active) setAgenda(readAgenda(data, year)); }).catch(() => {
-      if (active) setError('The agenda could not be loaded. Please try again.');
-    });
-    return () => { active = false; };
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 7000);
+    setAgenda(null); setError(''); setSavedCopy(false); setExpanded(new Set());
+    if (loader) (async () => {
+      try {
+        const endpoint = (import.meta.env.VITE_SUPABASE_URL || '').replace(/\/$/, '') + '/functions/v1/students?year=' + encodeURIComponent(year);
+        const response = await fetch(endpoint, { signal: controller.signal, cache: 'no-store' });
+        if (!response.ok) throw new Error('Agenda unavailable');
+        const result = await response.json();
+        const next = readAgenda(result.agenda, year);
+        if (active) setAgenda(next);
+      } catch {
+        try {
+          const next = readAgenda(await loader(), year);
+          // Names come only from the registry; an offline copy must not restore old spellings.
+          const schedule = { ...next, sections: next.sections.map(section => ({ ...section, items: section.items.map(item => ({ ...item, participants: [] })) })) };
+          if (active) { setAgenda(schedule); setSavedCopy(true); }
+        }
+        catch { if (active) setError('The agenda could not be loaded. Please try again.'); }
+      } finally { clearTimeout(timer); }
+    })();
+    return () => { active = false; clearTimeout(timer); controller.abort(); };
   }, [loader, year, attempt]);
   useEffect(() => {
     const previous = document.title;
@@ -83,6 +101,7 @@ export default function RecitalAgenda({ year }: { year: string }) {
       {!agenda && !error && <p role="status" className="py-12">Loading the agenda…</p>}
       {error && <div role="alert" className="my-8 rounded-xl border bg-white p-6"><p>{error}</p><button onClick={() => setAttempt(value => value + 1)} className="mt-4 rounded-full bg-rose-700 px-5 py-3 text-white">Try again</button></div>}
       {agenda && <>
+        {savedCopy && <p role="status" className="mt-5 text-sm text-stone-600">Showing the saved schedule. Performer names are temporarily unavailable. <button className="underline" onClick={() => setAttempt(value => value + 1)}>Refresh</button></p>}
         <nav aria-label="Agenda sections" className="grid grid-cols-2 gap-2 py-6 sm:grid-cols-5">{agenda.sections.map(section => <a key={section.id} href={`#${section.id}`} className="rounded-xl border border-stone-200 bg-white px-3 py-3 text-sm font-semibold text-stone-700 hover:border-rose-400"><span className="block">{section.title.replace('Second Half — ', '')}</span><span className="mt-1 block text-xs font-normal text-stone-500">{section.time}</span></a>)}</nav>
         <div className="mb-5 flex flex-wrap items-end justify-between gap-3"><div><h2 className="font-serif text-3xl text-stone-900">Evening program</h2><p className="mt-2 text-sm text-stone-600">Tap a performance to see who’s on stage.</p></div><button onClick={() => setExpanded(allExpanded ? new Set() : new Set(ids))} className="min-h-11 rounded-full border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-800 hover:bg-rose-50">{allExpanded ? 'Collapse all' : 'Expand all'}</button></div>
         <div className="space-y-6">{agenda.sections.map(section => <section key={section.id} id={section.id} aria-labelledby={`heading-${section.id}`} className="scroll-mt-24 overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
