@@ -23,8 +23,8 @@ test('corrections use Twilio Email, fixed recipient and escaped template variabl
   assert.equal(messages[0].to.length, 1);
   assert.equal(messages[0].to[0].address, 'at@teamevents.ai');
   assert.equal(messages[0].from.address, 'support@teamevents.ai');
-  assert.match(messages[0].content.html, /\{\{ correction \| escape \}\}/);
-  assert.equal(messages[0].content.text, '{{ correction }}');
+  assert.ok(messages[0].content.html.includes('{{ correction | default: \'No correction details provided.\' | escape }}'));
+  assert.equal(messages[0].content.text, '{{ correction | default: \'No correction details provided.\' }}');
   assert.ok(messages[0].to[0].variables.correction.includes(valid.email));
   assert.ok(messages[0].to[0].variables.correction.includes('<script>alert(1)</script>{{ 7 | plus: 1 }}'));
   assert.equal((await handler(request({ ...valid, email: '' }))).status, 200);

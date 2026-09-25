@@ -58,8 +58,8 @@ export function createCorrectionHandler({ credentials, send = fetch, now = Date.
           to: [{ address: 'at@teamevents.ai', variables: { correction: message } }],
           content: {
             subject: `Nrityangan ${year} recital — participant correction`,
-            html: '<pre style="white-space:pre-wrap;font-family:Arial,sans-serif">{{ correction | escape }}</pre>',
-            text: '{{ correction }}',
+            html: '<pre style="white-space:pre-wrap;font-family:Arial,sans-serif">{{ correction | default: \'No correction details provided.\' | escape }}</pre>',
+            text: '{{ correction | default: \'No correction details provided.\' }}',
           },
         }),
       });
