@@ -13,6 +13,7 @@ test('private registry: atomic saves, stale edit guard, public projection and pr
  try {
   await db.exec('create role anon; create role authenticated; create role service_role bypassrls; grant usage on schema public to anon, authenticated, service_role;');
   await db.exec(migration);
+  await db.exec(await fs.readFile('supabase/migrations/20260925025212_add_student_enrollment_consent.sql','utf8'));
   const rpc=async(name,arg)=>(await db.query(`select ${name}($1) as result`,[arg])).rows[0].result;
   const student=await rpc('save_student',JSON.stringify({...emptyStudent(),display_name:'Test Student',notes:'Private note',certifications:[{title:'Level One',academic_year:'2025-26',certificate_name:'TEST STUDENT'}]}));
   assert.equal(student.version,1);assert.equal(student.certifications.length,1);

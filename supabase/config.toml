@@ -15,3 +15,7 @@ verify_jwt = true
 
 [functions.students]
 verify_jwt = false
+
+# Public enrollment submission and token-authorized withdrawals; no private read API.
+[functions.enrollment]
+verify_jwt = false

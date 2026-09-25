@@ -153,7 +153,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <li><Link to="/gallery" className="hover:text-white">Gallery</Link></li>
                 <li><Link to="/recitals" className="hover:text-white">Annual Recitals</Link></li>
                 <li><Link to="/blog" className="hover:text-white">Kathak Journal</Link></li>
-                <li><a href="/admin" className="hover:text-white">Admin</a></li>
+                <li><a href="/enroll" className="hover:text-rose-400">Student Enrollment</a></li><li><a href="/admin" className="hover:text-white">Admin</a></li>
                 <li><Link to="/about" className="hover:text-white">About Us</Link></li>
                 <li><a href="/trial-class" className="hover:text-white">Book a Trial Class</a></li>
               </ul>
