@@ -12,3 +12,6 @@ verify_jwt = false
 
 [functions.agenda-correction]
 verify_jwt = true
+
+[functions.students]
+verify_jwt = false

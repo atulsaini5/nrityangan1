@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { BookOpen, CheckCircle2, ClipboardList, ImageUp, Loader2, LockKeyhole, RefreshCw } from 'lucide-react';
+import { BookOpen, CheckCircle2, ClipboardList, ImageUp, Loader2, LockKeyhole, RefreshCw, Users } from 'lucide-react';
 import BlogAdmin from '../components/BlogAdmin';
+import StudentAdmin from '../components/StudentAdmin';
 
 type TrialRequest = {
   id: string; created_at: string; contact_name: string; student_name: string;
@@ -21,8 +22,9 @@ const Admin: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
-  const [section, setSection] = useState<'requests' | 'photos' | 'journal'>('requests');
+  const [section, setSection] = useState<'requests' | 'photos' | 'journal' | 'students'>('requests');
   const sections = [
+    { id: 'students' as const, label: 'Students', icon: Users },
     { id: 'requests' as const, label: 'Trial Class Requests', icon: ClipboardList },
     { id: 'photos' as const, label: 'Upload Photos', icon: ImageUp },
     { id: 'journal' as const, label: 'Journal', icon: BookOpen },
@@ -117,12 +119,13 @@ const Admin: React.FC = () => {
       <main className="min-w-0 flex-1 p-4 md:p-8">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div><h1 className="font-serif text-3xl font-bold text-slate-900">{sections.find(item => item.id === section)?.label}</h1><p className="mt-1 text-slate-500">{section === 'journal' ? 'Create new blogs and edit your existing stories.' : section === 'photos' ? 'Add photos to your gallery albums.' : 'Manage enquiries and follow up with new students.'}</p></div>
-          {section !== 'journal' && <button onClick={load} disabled={busy} className="flex items-center gap-2 rounded-xl bg-white px-4 py-2 shadow-sm"><RefreshCw size={17} /> Refresh</button>}
+          <div><h1 className="font-serif text-3xl font-bold text-slate-900">{sections.find(item => item.id === section)?.label}</h1><p className="mt-1 text-slate-500">{section === 'students' ? 'Manage student names, classes, levels and certification history.' : section === 'journal' ? 'Create new blogs and edit your existing stories.' : section === 'photos' ? 'Add photos to your gallery albums.' : 'Manage enquiries and follow up with new students.'}</p></div>
+          {section !== 'journal' && section !== 'students' && <button onClick={load} disabled={busy} className="flex items-center gap-2 rounded-xl bg-white px-4 py-2 shadow-sm"><RefreshCw size={17} /> Refresh</button>}
         </div>
-        {message && section !== 'journal' && <p role="status" className="mb-6 rounded-xl bg-white p-4 text-sm text-slate-700 shadow-sm">{message}</p>}
+        {message && section !== 'journal' && section !== 'students' && <p role="status" className="mb-6 rounded-xl bg-white p-4 text-sm text-slate-700 shadow-sm">{message}</p>}
 
         {/* Keep each pane mounted so switching sections preserves unfinished edits and uploads. */}
+        <div id="admin-students" hidden={section !== 'students'}><StudentAdmin accessCode={accessCode} active={section === 'students'} /></div>
         <div id="admin-journal" hidden={section !== 'journal'}><BlogAdmin accessCode={accessCode} /></div>
 
         <section id="admin-requests" hidden={section !== 'requests'} className="mb-10 rounded-2xl bg-white p-5 shadow-sm">
