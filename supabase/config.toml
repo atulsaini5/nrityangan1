@@ -19,3 +19,7 @@ verify_jwt = false
 # Public enrollment submission and token-authorized withdrawals; no private read API.
 [functions.enrollment]
 verify_jwt = false
+
+# Admin key or single-use invitation token authorizes every guest action.
+[functions.guest-artists]
+verify_jwt = false

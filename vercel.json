@@ -16,6 +16,7 @@
     "minimumCacheTTL": 86400
   },
   "headers": [
+    { "source": "/guest-invitation", "headers": [{"key":"Referrer-Policy","value":"no-referrer"},{"key":"X-Robots-Tag","value":"noindex"}] },
     {
       "source": "/communication-preferences",
       "headers": [{ "key": "Referrer-Policy", "value": "no-referrer" }, { "key": "X-Robots-Tag", "value": "noindex" }]
@@ -38,6 +39,7 @@
     "api/journal.mjs": { "includeFiles": "{dist/blog-shell.html,dist-ssr/**}" }
   },
   "rewrites": [
+    { "source": "/guest-invitation", "destination": "/index.html" },
     { "source": "/enroll", "destination": "/index.html" },
     { "source": "/enrollment-privacy", "destination": "/index.html" },
     { "source": "/communication-terms", "destination": "/index.html" },
