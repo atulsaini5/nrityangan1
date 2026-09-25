@@ -50,17 +50,29 @@ Run `npm test` and `npm run build`. Verify `/recitals`, `/recitals/2026`, unknow
 
 Each year's agenda includes a correction form after the QR section. Requests go
 through the `agenda-correction` Supabase Edge Function to `at@teamevents.ai`, using
-the existing `SENDGRID_API_KEY` and sender `support@teamevents.ai`. No new secrets
-or database migrations are required. Requests are emailed for manual review;
+the direct Twilio Email API (`https://comms.twilio.com/v1/Emails`) and sender
+`support@teamevents.ai`. Configure server-only `TWILIO_ACCOUNT_SID` and
+`TWILIO_AUTH_TOKEN` in Supabase Edge Function secrets before deploying this
+version. Never add these credentials to Vite variables or source files.
+No database migrations are required. Requests are emailed for manual review;
 they never directly change the roster. Contact email is optional.
 
 Deploy the function with JWT verification enabled before deploying the frontend.
 Only the two production kathakseattle.com origins are accepted. Validation,
 a honeypot, bounded request size and best-effort per-instance throttling limit
-abuse; throttling is not durable across edge instances. Success requires SendGrid
+abuse; throttling is not durable across edge instances. Success requires Twilio
 to accept the email (202), not proof of inbox delivery. Participant data is not
 logged or stored by the function.
 
 Recovery: roll Vercel back to deployment `DCmpRxCZ3gbA4JHs7r9gVera9CBJ`
 (commit `8c47612`) to remove the form. The dedicated function can then be disabled
-without affecting trial-class emails. No environment variables are changed.
+without affecting trial-class emails. The trial-class endpoint still uses its
+existing SendGrid integration and is outside this change's scope.
+
+The direct Twilio Email product is distinct from the legacy SendGrid endpoint.
+On September 24, the signed-in Twilio account had email allowance remaining and
+accepted a console test from support@teamevents.ai to at@teamevents.ai, while
+the legacy SendGrid key returned a credits-related rejection. Do not infer the
+Twilio account balance from that legacy error. The optional visitor contact email
+is included in the message body for manual follow-up. Visitor text is passed as
+a Liquid variable and escaped in HTML, never concatenated into template code.

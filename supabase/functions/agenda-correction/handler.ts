@@ -1,6 +1,6 @@
-type Dependencies = { apiKey: () => string | undefined; send?: typeof fetch; now?: () => number };
+type Dependencies = { credentials: () => { accountSid: string; authToken: string } | undefined; send?: typeof fetch; now?: () => number };
 
-export function createCorrectionHandler({ apiKey, send = fetch, now = Date.now }: Dependencies) {
+export function createCorrectionHandler({ credentials, send = fetch, now = Date.now }: Dependencies) {
   // Best-effort per-instance abuse protection; no participant data is retained.
   const attempts = new Map<string, { count: number; expires: number }>();
   const origins = ['https://www.kathakseattle.com', 'https://kathakseattle.com'];
@@ -45,27 +45,28 @@ export function createCorrectionHandler({ apiKey, send = fetch, now = Date.now }
     const entry = attempts.get(ip) || { count: 0, expires: time + 300000 };
     if (entry.count >= 3 || attempts.size >= 10000) return reply(429, 'Please try again in a few minutes.');
     entry.count += 1; attempts.set(ip, entry);
-    const key = apiKey();
-    if (!key) return reply(503, 'Email is temporarily unavailable.');
+    const auth = credentials();
+    if (!auth?.accountSid || !auth.authToken) return reply(503, 'Email is temporarily unavailable.');
     try {
-      const response = await send('https://api.sendgrid.com/v3/mail/send', {
-        method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      const message = `A visitor requested a participant correction. Please review before changing the agenda.\n\nRecital: ${year}\nPerformance: ${performance}\nParticipant: ${participant}\nRequested correction:\n${correction}\n\nContact email: ${email || 'Not provided'}\nAgenda: https://www.kathakseattle.com/recitals/${year}/agenda`;
+      const response = await send('https://comms.twilio.com/v1/Emails', {
+        method: 'POST', headers: { Authorization: `Basic ${btoa(`${auth.accountSid}:${auth.authToken}`)}`, 'Content-Type': 'application/json' },
         signal: AbortSignal.timeout(12000),
         body: JSON.stringify({
-          personalizations: [{ to: [{ email: 'at@teamevents.ai' }] }],
-          from: { email: 'support@teamevents.ai', name: 'Nrityangan Kathak Studio' },
-          ...(email ? { reply_to: { email } } : {}),
-          subject: `Nrityangan ${year} recital — participant correction`,
-          content: [{ type: 'text/plain', value: `A visitor requested a participant correction. Please review before changing the agenda.\n\nRecital: ${year}\nPerformance: ${performance}\nParticipant: ${participant}\nRequested correction:\n${correction}\n\nContact email: ${email || 'Not provided'}\nAgenda: https://www.kathakseattle.com/recitals/${year}/agenda` }],
+          from: { address: 'support@teamevents.ai', name: 'Nrityangan Kathak Studio' },
+          // Keep visitor text in a variable so it cannot become Liquid template code.
+          to: [{ address: 'at@teamevents.ai', variables: { correction: message } }],
+          content: {
+            subject: `Nrityangan ${year} recital — participant correction`,
+            html: '<pre style="white-space:pre-wrap;font-family:Arial,sans-serif">{{ correction | escape }}</pre>',
+            text: '{{ correction }}',
+          },
         }),
       });
       if (response.status !== 202) {
         // Log only provider status and known configuration categories, never the
         // submitted names, message, credentials, or raw provider response.
-        const details = (await response.text()).toLowerCase();
-        const reason = details.includes('credits') ? 'credits' : details.includes('verified sender') ? 'sender-verification' :
-          details.includes('authorization') || details.includes('api key') ? 'credentials' : 'provider-rejection';
-        console.error('agenda-correction email rejected', response.status, reason);
+        console.error('agenda-correction Twilio email rejected', response.status);
         return reply(502, 'Unable to send email. Please try again.');
       }
       return reply(200);

@@ -1,3 +1,7 @@
 import { createCorrectionHandler } from './handler.ts';
 
-Deno.serve(createCorrectionHandler({ apiKey: () => Deno.env.get('SENDGRID_API_KEY') }));
+Deno.serve(createCorrectionHandler({ credentials: () => {
+  const accountSid = Deno.env.get('TWILIO_ACCOUNT_SID');
+  const authToken = Deno.env.get('TWILIO_AUTH_TOKEN');
+  return accountSid && authToken ? { accountSid, authToken } : undefined;
+} }));
