@@ -66,13 +66,9 @@ logged or stored by the function.
 
 Recovery: roll Vercel back to deployment `DCmpRxCZ3gbA4JHs7r9gVera9CBJ`
 (commit `8c47612`) to remove the form. The dedicated function can then be disabled
-without affecting trial-class emails. The trial-class endpoint still uses its
-existing SendGrid integration and is outside this change's scope.
+without affecting trial-class emails. Trial-class notifications now use the same
+direct Twilio Email API and notify both studio recipients documented in README.md.
 
-The direct Twilio Email product is distinct from the legacy SendGrid endpoint.
-On September 24, the signed-in Twilio account had email allowance remaining and
-accepted a console test from support@teamevents.ai to at@teamevents.ai, while
-the legacy SendGrid key returned a credits-related rejection. Do not infer the
-Twilio account balance from that legacy error. The optional visitor contact email
-is included in the message body for manual follow-up. Visitor text is passed as
+The optional visitor contact email is included in the message body for manual
+follow-up. Visitor text is passed as
 a Liquid variable and escaped in HTML, never concatenated into template code.
