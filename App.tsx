@@ -5,6 +5,7 @@ import About from './pages/About';
 import Gallery from './pages/Gallery';
 import LandingPage from './pages/LandingPage';
 import Admin from './pages/Admin';
+import GuestInvitation from './pages/GuestInvitation';
 import Enrollment, { CommunicationPreferences, EnrollmentNotice } from './pages/Enrollment';
 import Blog from './pages/Blog';
 import { CLASSES, LOCATIONS, CLASS_CATEGORIES } from './constants';
@@ -171,7 +172,7 @@ const ClassesPage = () => {
 
 // Custom Hook for Hash-based routing
 const useHashLocation = () => {
-  const indexedPaths = ['/enroll', '/enrollment-privacy', '/communication-terms', '/communication-preferences', '/admin', '/kids-kathak-bellevue', '/kathak-classes-redmond', '/adult-kathak-bellevue', '/trial-class', '/trial-class/thank-you'];
+  const indexedPaths = ['/guest-invitation', '/enroll', '/enrollment-privacy', '/communication-terms', '/communication-preferences', '/admin', '/kids-kathak-bellevue', '/kathak-classes-redmond', '/adult-kathak-bellevue', '/trial-class', '/trial-class/thank-you'];
   const getLocation = () => (indexedPaths.includes(window.location.pathname) || /^\/(?:blog|recitals)(?:\/|$)/.test(window.location.pathname))
     ? window.location.pathname
     : window.location.hash.replace(/^#/, '') || '/';
@@ -192,6 +193,7 @@ const App: React.FC = () => {
   // Basic Routing Logic without react-router-dom
   let content;
   switch (currentPath) {
+    case '/guest-invitation': content = <GuestInvitation />; break;
     case '/enroll': content = <Enrollment />; break;
     case '/enrollment-privacy': content = <EnrollmentNotice />; break;
     case '/communication-terms': content = <EnrollmentNotice terms />; break;

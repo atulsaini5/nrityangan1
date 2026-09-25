@@ -36,7 +36,7 @@ export function createStudentHandler(deps: Dependencies) {
     if(typeof body.id!=='string' || !/^[0-9a-f-]{36}$/i.test(body.id)) return reply({error:'Invalid student'},400);
     const {data,error}=await db.rpc('student_detail',{target:body.id});
     if(error) throw error;
-    return data ? reply({student:data}) : reply({error:'Student not found'},404);
+    return data?.kind==='student' ? reply({student:data}) : reply({error:'Student not found'},404);
    }
    if(body.action==='enrollments') {
     const offset=Number.isInteger(body.offset)&&body.offset>=0?body.offset:0;
@@ -57,6 +57,7 @@ export function createStudentHandler(deps: Dependencies) {
     if(result.error)throw result.error;return reply({success:true,student_id:result.data});
    }
    if(body.action==='save') {
+    if(body.student?.kind!=='student')return reply({error:'Manage guest artists and instructors in Guest Artists.'},400);
     try {validateStudent(body.student);} catch(e) {return reply({error:(e as Error).message},400);}
     const {data,error}=await db.rpc('save_student',{payload:body.student});
     if(error?.code==='40001') return reply({error:'Another edit was saved. Reload this student before saving your changes.'},409);
