@@ -1,4 +1,5 @@
 import { validateStudent } from '../../../lib/studentModel.ts';
+import { validateClass } from '../../../lib/classModel.ts';
 type Dependencies = { client: () => any; adminKey: () => string; allowedOrigins: string[] };
 export function createStudentHandler(deps: Dependencies) {
  return async (request: Request) => {
@@ -7,6 +8,11 @@ export function createStudentHandler(deps: Dependencies) {
   const reply = (body: unknown,status=200) => new Response(JSON.stringify(body),{status,headers});
   if (request.method==='OPTIONS') return new Response(null,{status:204,headers});
   if (request.method==='GET') {
+   if(new URL(request.url).searchParams.get('catalogue')==='1') {
+    try {const db=deps.client();const [classes,locations]=await Promise.all([db.from('class_sessions').select('id,name,location_id,day_of_week,start_time,duration_minutes,instructor,level,age_group,curriculum').eq('published',true).order('name'),db.from('class_locations').select('id,name,address').order('name')]);
+     if(classes.error||locations.error)throw Error();return reply({classes:classes.data,locations:locations.data});
+    }catch{return reply({error:'Schedule unavailable'},503);}
+   }
    const year = new URL(request.url).searchParams.get('year');
    if (!year || !/^20\d{2}$/.test(year)) return reply({error:'Invalid recital year'},400);
    try {
@@ -26,6 +32,26 @@ export function createStudentHandler(deps: Dependencies) {
    try {body=JSON.parse(raw);} catch {return reply({error:'Invalid request'},400);}
    if (!body || typeof body!=='object') return reply({error:'Invalid request'},400);
    const db=deps.client();
+   if(body.action==='classes') {
+    const [classes,locations]=await Promise.all([db.from('class_sessions').select('*').order('name').order('schedule'),db.from('class_locations').select('*').order('name')]);
+    if(classes.error||locations.error)throw Error();return reply({classes:classes.data,locations:locations.data});
+   }
+   if(['save_class','save_location','assign_class'].includes(body.action)) {
+    let result;
+    if(body.action==='save_class') {
+     try{validateClass(body.class);}catch(e){return reply({error:(e as Error).message},400);}
+     result=await db.rpc('save_class_session',{payload:body.class});
+    }else if(body.action==='save_location') {
+     const l=body.location;if(!l||typeof l.name!=='string'||!l.name.trim()||l.name.length>200||typeof l.address!=='string'||!l.address.trim()||l.address.length>500)return reply({error:'Enter a location name and address.'},400);
+     result=await db.rpc('save_class_location',{payload:l});
+    }else {
+     if(typeof body.student_id!=='string'||!/^[0-9a-f-]{36}$/i.test(body.student_id)||!Number.isInteger(body.version)||typeof body.class_id!=='string'||typeof body.academic_year!=='string'||!/^20\d{2}-\d{2}$/.test(body.academic_year)||(body.source_class!=null&&typeof body.source_class!=='string'))return reply({error:'Choose a student, class and academic year.'},400);
+     result=await db.rpc('assign_student_class',{target_student:body.student_id,target_class:body.class_id,target_year:body.academic_year,expected_version:body.version,source_class:body.source_class||null});
+    }
+    if(result.error?.code==='40001')return reply({error:'This record changed. Refresh before saving.'},409);
+    if(['23503','22023','23514'].includes(result.error?.code))return reply({error:'Check the class, location and academic year. Assignments require a published class.'},400);
+    if(result.error)throw result.error;return reply({record:result.data});
+   }
    if(body.action==='list') {
     const offset=Number.isInteger(body.offset) && body.offset>=0 ? body.offset : 0;
     const [students,classes]=await Promise.all([db.rpc('student_directory',{page_offset:offset}),db.from('class_sessions').select('*').order('name').order('schedule')]);
@@ -48,12 +74,14 @@ export function createStudentHandler(deps: Dependencies) {
     let result;
     if(body.action==='review_enrollment') {
      if(!['approved','declined'].includes(body.outcome)||(body.student_id!=null&&(typeof body.student_id!=='string'||!/^[0-9a-f-]{36}$/i.test(body.student_id)||!Number.isInteger(body.version))))return reply({error:'Select a student and review action'},400);
-     result=await db.rpc('review_enrollment',{request_id:body.id,target_student:body.student_id||null,outcome:body.outcome,expected_version:body.version||null});
+     const args={request_id:body.id,target_student:body.student_id||null,outcome:body.outcome,expected_version:body.version||null};
+     result=body.class_id!==undefined?await db.rpc('review_enrollment_class',{...args,selected_class:body.class_id}):await db.rpc('review_enrollment',args);
     } else {
      if(!['email','sms'].includes(body.channel))return reply({error:'Invalid channel'},400);
      result=await db.rpc('withdraw_enrollment_consent',{request_id:body.id,requested_channel:body.channel,event_source:'admin_withdrawal'});
     }
     if(result.error?.code==='40001')return reply({error:'The request or student changed. Refresh before reviewing.'},409);
+    if(result.error?.code==='22023')return reply({error:'Choose a published class for this enrollment.'},400);
     if(result.error)throw result.error;return reply({success:true,student_id:result.data});
    }
    if(body.action==='save') {

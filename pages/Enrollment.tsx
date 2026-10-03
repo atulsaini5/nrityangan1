@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { CLASSES, LOCATIONS } from '../constants';
+import {useSchedule} from '../lib/useSchedule';
 import { ADULT_ATTESTATION, CONSENT_VERSION, EMAIL_CONSENT, SMS_CONSENT, EnrollmentInput, validateEnrollment } from '../lib/enrollmentModel';
 const endpoint=(import.meta.env.VITE_SUPABASE_URL||'').replace(/\/$/,'')+'/functions/v1/enrollment';
 const input='mt-2 w-full rounded-xl border border-stone-300 bg-white px-4 py-3';
 const token=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
 const academicYear=()=>{const now=new Date(),year=now.getMonth()>=7?now.getFullYear():now.getFullYear()-1;return `${year}-${String((year+1)%100).padStart(2,'0')}`;};
 export default function Enrollment(){
+ const {classes:CLASSES,locations:LOCATIONS,error:scheduleError,loading:scheduleLoading}=useSchedule();
  const [form,setForm]=useState<EnrollmentInput>(()=>({request_key:crypto.randomUUID(),preference_token:token(),student_name:'',contact_name:'',relationship:'parent_guardian',email:'',phone:'',class_id:'',academic_year:academicYear(),notes:'',email_opt_in:false,sms_opt_in:false,adult_attestation:false,consent_version:CONSENT_VERSION,website:''}));
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[complete,setComplete]=useState(false);
  const patch=(p:Partial<EnrollmentInput>)=>setForm(f=>({...f,...p}));
@@ -21,7 +22,7 @@ export default function Enrollment(){
     <label className="block font-medium">Adult contact’s full name<input required autoComplete="name" maxLength={160} className={input} value={form.contact_name} onChange={e=>patch({contact_name:e.target.value})}/></label>
     <label className="block font-medium">Contact email<input required type="email" autoComplete="email" maxLength={254} className={input} value={form.email} onChange={e=>patch({email:e.target.value})}/><span className="mt-1 block text-sm font-normal text-stone-500">We may respond to this enrollment request even if you do not opt in to ongoing emails.</span></label>
     <label className="block font-medium">Contact phone (optional)<input type="tel" autoComplete="tel" maxLength={40} placeholder="(425) 555-0123" className={input} value={form.phone} onChange={e=>patch({phone:e.target.value})}/><span className="mt-1 block text-sm font-normal text-stone-500">A mobile number is required only if you choose SMS messages.</span></label>
-    <label className="block font-medium">Preferred class<select className={input} value={form.class_id} onChange={e=>patch({class_id:e.target.value})}><option value="">Help me choose a class</option>{CLASSES.map(c=><option key={c.id} value={c.id}>{c.title} · {c.dayOfWeek} {c.startTime} · {LOCATIONS.find(l=>l.id===c.locationId)?.name}</option>)}</select></label>
+    {scheduleError&&<p role="alert" className="text-amber-800">{scheduleError} You can still submit and ask for help choosing a class.</p>}{scheduleLoading&&<p>Loading current classes…</p>}<label className="block font-medium">Preferred class<select className={input} value={form.class_id} onChange={e=>patch({class_id:e.target.value})}><option value="">Help me choose a class</option>{CLASSES.map(c=><option key={c.id} value={c.id}>{c.title} · {c.dayOfWeek} {c.startTime} · {LOCATIONS.find(l=>l.id===c.locationId)?.name}</option>)}</select></label>
     <label className="block font-medium">Academic year<input required className={input} value={form.academic_year} onChange={e=>patch({academic_year:e.target.value})} placeholder="2026-27"/></label>
     <label className="block font-medium">Anything else we should know? (optional)<textarea maxLength={2000} rows={3} className={input} value={form.notes} onChange={e=>patch({notes:e.target.value})}/></label>
     <div className="space-y-4 rounded-xl bg-rose-50 p-5"><h2 className="font-serif text-2xl">Communication choices</h2><p className="text-sm">Choose either, both, or neither. Your choices do not affect enrollment.</p>

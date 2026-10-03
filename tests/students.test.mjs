@@ -6,7 +6,7 @@ import {PGlite} from '@electric-sql/pglite';
 const url=source=>'data:text/javascript;base64,'+Buffer.from(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText).toString('base64');
 const modelUrl=url(await fs.readFile('lib/studentModel.ts','utf8'));
 const {emptyStudent,validateStudent}=await import(modelUrl);
-const {createStudentHandler}=await import(url((await fs.readFile('supabase/functions/students/handler.ts','utf8')).replace('../../../lib/studentModel.ts',modelUrl)));
+const {createStudentHandler}=await import(url((await fs.readFile('supabase/functions/students/handler.ts','utf8')).replace('../../../lib/classModel.ts',url(await fs.readFile('lib/classModel.ts','utf8'))).replace('../../../lib/studentModel.ts',modelUrl)));
 const migration=await fs.readFile('supabase/migrations/20260925021422_create_student_management.sql','utf8');
 test('private registry: atomic saves, stale edit guard, public projection and privileges',async()=>{
  const db=new PGlite();

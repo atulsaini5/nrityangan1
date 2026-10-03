@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { BookOpen, CheckCircle2, ClipboardList, ImageUp, Loader2, LockKeyhole, RefreshCw, Users } from 'lucide-react';
+import ClassAdmin from '../components/ClassAdmin';
 import BlogAdmin from '../components/BlogAdmin';
 import StudentAdmin from '../components/StudentAdmin';
 import GuestArtistAdmin from '../components/GuestArtistAdmin';
 
 type TrialRequest = {
+  enrollment_invitation_status: 'not_sent'|'sending'|'accepted'|'failed'|'unknown'; enrollment_invitation_sent_at:string|null;
   id: string; created_at: string; contact_name: string; student_name: string;
   email: string; phone: string; student_age: number | null; class_interest: string;
   location_interest: string; notes: string | null; followup_completed: boolean;
@@ -23,8 +25,9 @@ const Admin: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
-  const [section, setSection] = useState<'requests' | 'photos' | 'journal' | 'students' | 'guests'>('requests');
+  const [section, setSection] = useState<'requests' | 'photos' | 'journal' | 'students' | 'guests' | 'classes'>('requests');
   const sections = [
+    { id: 'classes' as const, label: 'Classes', icon: BookOpen },
     { id: 'students' as const, label: 'Students', icon: Users },
     { id: 'guests' as const, label: 'Guest Artists', icon: Users },
     { id: 'requests' as const, label: 'Trial Class Requests', icon: ClipboardList },
@@ -59,6 +62,13 @@ const Admin: React.FC = () => {
   };
 
   useEffect(() => { if (accessCode) load(); }, []);
+
+  const sendEnrollment=async(request:TrialRequest)=>{
+    setBusy(true);setMessage('');
+    try {const result=await callAdmin({action:'send_enrollment',id:request.id});setMessage(result.message);}
+    catch(error){setMessage(error instanceof Error?error.message:'Unable to send enrollment email');}
+    finally {try{const data=await callAdmin({action:'list_requests'});setRequests(data.requests??[]);}catch{setMessage('Refresh requests to check delivery status.');}setBusy(false);}
+  };
 
   const toggleFollowup = async (request: TrialRequest) => {
     setRequests((current) => current.map((item) => item.id === request.id ? { ...item, followup_completed: !item.followup_completed } : item));
@@ -121,12 +131,13 @@ const Admin: React.FC = () => {
       <main className="min-w-0 flex-1 p-4 md:p-8">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div><h1 className="font-serif text-3xl font-bold text-slate-900">{sections.find(item => item.id === section)?.label}</h1><p className="mt-1 text-slate-500">{section === 'students' ? 'Manage student names, classes, levels and certification history.' : section === 'guests' ? 'Manage guest artists, instructors and private invitation links.' : section === 'journal' ? 'Create new blogs and edit your existing stories.' : section === 'photos' ? 'Add photos to your gallery albums.' : 'Manage enquiries and follow up with new students.'}</p></div>
-          {section !== 'journal' && section !== 'students' && section !== 'guests' && <button onClick={load} disabled={busy} className="flex items-center gap-2 rounded-xl bg-white px-4 py-2 shadow-sm"><RefreshCw size={17} /> Refresh</button>}
+          <div><h1 className="font-serif text-3xl font-bold text-slate-900">{sections.find(item => item.id === section)?.label}</h1><p className="mt-1 text-slate-500">{section === 'classes' ? 'Edit schedules and locations, publish classes and manage rosters.' : section === 'students' ? 'Manage student names, classes, levels and certification history.' : section === 'guests' ? 'Manage guest artists, instructors and private invitation links.' : section === 'journal' ? 'Create new blogs and edit your existing stories.' : section === 'photos' ? 'Add photos to your gallery albums.' : 'Manage enquiries and follow up with new students.'}</p></div>
+          {section !== 'journal' && section !== 'students' && section !== 'guests' && section !== 'classes' && <button onClick={load} disabled={busy} className="flex items-center gap-2 rounded-xl bg-white px-4 py-2 shadow-sm"><RefreshCw size={17} /> Refresh</button>}
         </div>
-        {message && section !== 'journal' && section !== 'students' && section !== 'guests' && <p role="status" className="mb-6 rounded-xl bg-white p-4 text-sm text-slate-700 shadow-sm">{message}</p>}
+        {message && section !== 'journal' && section !== 'students' && section !== 'guests' && section !== 'classes' && <p role="status" className="mb-6 rounded-xl bg-white p-4 text-sm text-slate-700 shadow-sm">{message}</p>}
 
         {/* Keep each pane mounted so switching sections preserves unfinished edits and uploads. */}
+        <div id="admin-classes" hidden={section !== 'classes'}><ClassAdmin accessCode={accessCode} active={section === 'classes'} /></div>
         <div id="admin-students" hidden={section !== 'students'}><StudentAdmin accessCode={accessCode} active={section === 'students'} /></div>
         <div id="admin-guests" hidden={section !== 'guests'}><GuestArtistAdmin accessCode={accessCode} active={section === 'guests'} /></div>
         <div id="admin-journal" hidden={section !== 'journal'}><BlogAdmin accessCode={accessCode} /></div>
@@ -135,14 +146,14 @@ const Admin: React.FC = () => {
           <h2 className="mb-5 text-xl font-bold text-slate-900">Trial class requests</h2>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[1000px] text-left text-sm">
-              <thead className="border-b text-xs uppercase text-slate-500"><tr><th className="p-3">Follow-up</th><th className="p-3">Received</th><th className="p-3">Contact</th><th className="p-3">Student</th><th className="p-3">Class / Location</th><th className="p-3">Notes</th></tr></thead>
+              <thead className="border-b text-xs uppercase text-slate-500"><tr><th className="p-3">Follow-up</th><th className="p-3">Received</th><th className="p-3">Contact</th><th className="p-3">Student</th><th className="p-3">Class / Location</th><th className="p-3">Notes</th><th className="p-3">Enrollment form</th></tr></thead>
               <tbody>{requests.map((request) => <tr key={request.id} className={request.followup_completed ? 'border-b bg-emerald-50/60' : 'border-b'}>
                 <td className="p-3"><button onClick={() => toggleFollowup(request)} className={`flex items-center gap-2 rounded-lg px-3 py-2 font-medium ${request.followup_completed ? 'bg-emerald-600 text-white' : 'bg-amber-100 text-amber-800'}`}>{request.followup_completed && <CheckCircle2 size={16} />}{request.followup_completed ? 'Completed' : 'Mark complete'}</button></td>
                 <td className="p-3 whitespace-nowrap">{new Date(request.created_at).toLocaleString()}</td>
                 <td className="p-3"><strong>{request.contact_name}</strong><br/><a className="text-rose-600" href={`mailto:${request.email}`}>{request.email}</a><br/><a className="text-rose-600" href={`tel:${request.phone}`}>{request.phone}</a></td>
                 <td className="p-3"><strong>{request.student_name}</strong>{request.student_age && <><br/>Age {request.student_age}</>}</td>
                 <td className="p-3">{request.class_interest}<br/><span className="text-slate-500">{request.location_interest}</span></td>
-                <td className="max-w-xs p-3 text-slate-600">{request.notes || 'â€”'}</td>
+                <td className="max-w-xs p-3 text-slate-600">{request.notes || '—'}</td><td className="p-3"><button disabled={busy||['sending','accepted','unknown'].includes(request.enrollment_invitation_status)} onClick={()=>sendEnrollment(request)} className="rounded-lg bg-rose-700 px-3 py-2 font-medium text-white disabled:opacity-50">{request.enrollment_invitation_status==='failed'?'Retry enrollment email':'Send enrollment form'}</button><p className="mt-2 text-xs text-slate-500">{request.enrollment_invitation_status==='accepted'?'Accepted for delivery':request.enrollment_invitation_status==='sending'||request.enrollment_invitation_status==='unknown'?'Check delivery status before resending':request.enrollment_invitation_status==='failed'?'Send failed':''}{request.enrollment_invitation_sent_at&&' · '+new Date(request.enrollment_invitation_sent_at).toLocaleString()}</p></td>
               </tr>)}</tbody>
             </table>
             {!requests.length && <p className="p-8 text-center text-slate-500">No trial requests yet.</p>}

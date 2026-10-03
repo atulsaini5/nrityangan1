@@ -1,3 +1,4 @@
+import {createTrialEnrollmentSender} from './trialEnrollment.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const allowedOrigins = (Deno.env.get('ALLOWED_ORIGINS') ?? '')
@@ -35,9 +36,17 @@ Deno.serve(async (request) => {
     const body = await request.json();
     const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
 
+    if (body.action === 'send_enrollment') {
+      const result=await createTrialEnrollmentSender({client:()=>supabase,credentials:()=>{
+        const accountSid=Deno.env.get('TWILIO_ACCOUNT_SID'),authToken=Deno.env.get('TWILIO_AUTH_TOKEN');
+        return accountSid&&authToken?{accountSid,authToken}:undefined;
+      }})(body.id);
+      return reply(result.body,result.status,headers);
+    }
+
     if (body.action === 'list_requests') {
       const { data, error } = await supabase.from('trial_class_requests')
-        .select('id,created_at,contact_name,student_name,email,phone,student_age,class_interest,location_interest,notes,followup_completed,followup_completed_at,notification_sent')
+        .select('id,created_at,contact_name,student_name,email,phone,student_age,class_interest,location_interest,notes,followup_completed,followup_completed_at,notification_sent,enrollment_invitation_status,enrollment_invitation_sent_at')
         .order('created_at', { ascending: false }).limit(500);
       if (error) throw error;
       return reply({ requests: data }, 200, headers);
@@ -75,7 +84,7 @@ Deno.serve(async (request) => {
 
     return reply({ error: 'Unknown action' }, 400, headers);
   } catch (error) {
-    console.error(error);
+    console.error('Admin request failed');
     return reply({ error: 'Unable to complete the admin request' }, 500, headers);
   }
 });

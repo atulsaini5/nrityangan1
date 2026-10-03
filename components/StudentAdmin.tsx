@@ -27,7 +27,7 @@ export default function StudentAdmin({ accessCode, active }: { accessCode: strin
    let pending:EnrollmentRequest[]=[];offset=0;while(true){const data=await api({action:'enrollments',offset});pending=pending.concat(data.requests);if(data.requests.length<500)break;offset+=500;}setRequests(pending);setLoaded(true);
   } catch(e) {setError((e as Error).message);} finally {setBusy(false);}
  };
- useEffect(()=>{if(active&&!loaded) void load();},[active]);
+ useEffect(()=>{if(active&&!dirty) void load();},[active]);
  useEffect(()=>{const guard=(event: BeforeUnloadEvent)=>{if(dirty){event.preventDefault();event.returnValue='';}};window.addEventListener('beforeunload',guard);return()=>window.removeEventListener('beforeunload',guard);},[dirty]);
  const open=async(id?: string) => {
   if(dirty&&!window.confirm('Discard unsaved student changes?')) return;
