@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CheckCircle2, Loader2, X } from 'lucide-react';
-import { CLASS_CATEGORIES, LOCATIONS } from '../constants';
+import {useSchedule} from '../lib/useSchedule';
 
 interface TrialClassFormProps {
   isOpen?: boolean;
@@ -31,6 +31,8 @@ const initialFormData: TrialFormData = {
 };
 
 const TrialClassForm: React.FC<TrialClassFormProps> = ({ isOpen = true, onClose = () => undefined, mode = 'modal' }) => {
+  const {classes,locations:LOCATIONS}=useSchedule();
+  const CLASS_CATEGORIES=Array.from(new Set(classes.map(c=>c.title))).map(title=>({id:title,title}));
   const [formData, setFormData] = useState(initialFormData);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');

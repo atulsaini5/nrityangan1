@@ -1,7 +1,8 @@
 import React from 'react';
 import { ArrowRight, CheckCircle2, Clock, MapPin, Sparkles, Users } from 'lucide-react';
 import TrialClassForm from '../components/TrialClassForm';
-import { CLASSES, LOCATIONS } from '../constants';
+import {useSchedule} from '../lib/useSchedule';
+import {ClassSession,Location} from '../types';
 import { nrityanganImage } from '../lib/storage';
 
 type LandingPageKind = 'kids-bellevue' | 'redmond' | 'adult-bellevue' | 'trial' | 'trial-thank-you';
@@ -55,11 +56,11 @@ const PAGE_COPY: Record<Exclude<LandingPageKind, 'trial' | 'trial-thank-you'>, {
   },
 };
 
-const getRelevantClasses = (kind: Exclude<LandingPageKind, 'trial' | 'trial-thank-you'>) => {
+const getRelevantClasses = (CLASSES:ClassSession[],locations:Location[],kind: Exclude<LandingPageKind, 'trial' | 'trial-thank-you'>) => {
   const page = PAGE_COPY[kind];
   return CLASSES.filter((classSession) => {
-    const atLocation = page.locationIds.includes(classSession.locationId);
-    if (page.audience === 'kids') return atLocation && /Kids/i.test(classSession.ageGroup);
+    const atLocation = locations.some(l=>l.id===classSession.locationId);
+    if (page.audience === 'kids') return atLocation && /Kids|5-12/i.test(classSession.ageGroup);
     if (page.audience === 'adult') return atLocation && /Adult|All Ages/i.test(classSession.ageGroup);
     return atLocation;
   });
@@ -106,8 +107,9 @@ const TrialThankYouPage = () => (
 
 const LocationIntentPage: React.FC<{ kind: Exclude<LandingPageKind, 'trial' | 'trial-thank-you'> }> = ({ kind }) => {
   const page = PAGE_COPY[kind];
-  const classes = getRelevantClasses(kind);
-  const locations = LOCATIONS.filter((location) => page.locationIds.includes(location.id));
+  const {classes:CLASSES,locations:LOCATIONS,error}=useSchedule();
+  const locations = LOCATIONS.filter(location => (kind==='redmond'?/Redmond/i:/Bellevue/i).test(location.address));
+  const classes = getRelevantClasses(CLASSES,locations,kind);
 
   return (
     <div className="bg-white">
@@ -126,7 +128,7 @@ const LocationIntentPage: React.FC<{ kind: Exclude<LandingPageKind, 'trial' | 't
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-rose-600">Current weekly options</p>
-            <h2 className="mt-2 font-serif text-3xl font-bold text-slate-900">Find a class that fits</h2>
+            <h2 className="mt-2 font-serif text-3xl font-bold text-slate-900">Find a class that fits</h2>{error&&<p role="alert">{error}</p>}
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {classes.map((classSession) => {
                 const location = LOCATIONS.find((item) => item.id === classSession.locationId);

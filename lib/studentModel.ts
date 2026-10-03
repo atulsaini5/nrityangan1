@@ -9,7 +9,7 @@ export type Student = {
   performances?: { year: string; recital: string; title: string; number?: string; role: string }[];
 };
 export type ConsentEvent = { id: string; enrollment_id: string; channel: 'email' | 'sms'; decision: 'opted_in' | 'not_opted_in' | 'withdrawn'; destination: string; recorded_at: string; consent_version: string; disclosure_text: string; source: string; evidence: Record<string, unknown> };
-export type ClassSession = { id: string; name: string; location: string; schedule: string; instructor: string; level: string; age_group: string };
+export type ClassSession = { published?: boolean; id: string; name: string; location: string; schedule: string; instructor: string; level: string; age_group: string };
 export const emptyStudent = (): Student => ({ display_name: '', certificate_name: '', aliases: [], current_level: '', status: 'active', kind: 'student', needs_review: false, notes: '', certifications: [], enrollments: [] });
 export function validateStudent(value: unknown): asserts value is Student {
   if (!value || typeof value !== 'object') throw new Error('Student is required.');

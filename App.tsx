@@ -8,8 +8,9 @@ import Admin from './pages/Admin';
 import GuestInvitation from './pages/GuestInvitation';
 import Enrollment, { CommunicationPreferences, EnrollmentNotice } from './pages/Enrollment';
 import Blog from './pages/Blog';
-import { CLASSES, LOCATIONS, CLASS_CATEGORIES } from './constants';
-import { ClassSession } from './types';
+import { CLASS_CATEGORIES } from './constants';
+import {useSchedule} from './lib/useSchedule';
+import { ClassSession, Location } from './types';
 import { Clock, MapPin, Calendar as CalendarIcon } from 'lucide-react';
 
 const Recitals = lazy(() => import('./pages/Recitals'));
@@ -25,7 +26,7 @@ const formatTime = (time: string) => {
 
 // --- Components for Classes Page ---
 
-const ClassCard = ({ title, age, description, sessions, image }: { title: string, age: string, description: string, sessions: ClassSession[], image: string }) => (
+const ClassCard = ({ title, age, description, sessions, image, locations: LOCATIONS }: { locations: Location[], title: string, age: string, description: string, sessions: ClassSession[], image: string }) => (
   <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full group">
     <div className="h-56 overflow-hidden relative">
       <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/0 transition-colors z-10"></div>
@@ -58,7 +59,7 @@ const ClassCard = ({ title, age, description, sessions, image }: { title: string
   </div>
 );
 
-const CalendarView = () => {
+const CalendarView = ({classes:CLASSES,locations:LOCATIONS}:{classes:ClassSession[];locations:Location[]}) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   
   // Helper to convert time string "17:15" to minutes from start of day for sorting
@@ -116,16 +117,14 @@ const CalendarView = () => {
 };
 
 const ClassesPage = () => {
+  const {classes:CLASSES,locations:LOCATIONS,error,loading}=useSchedule();
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list');
 
-  // Prepare display data by mapping categories to their sessions
-  const classTypes = CLASS_CATEGORIES.map(cat => ({
-    ...cat,
-    sessions: CLASSES.filter(c => 
-      c.title === cat.match.title && 
-      (!cat.match.ageGroup || c.ageGroup === cat.match.ageGroup)
-    )
-  }));
+  const classTypes = Array.from(new Set(CLASSES.map(c=>c.title))).map(title=>{
+    const sessions=CLASSES.filter(c=>c.title===title),first=sessions[0];
+    const category=CLASS_CATEGORIES.find(c=>c.match.title===title);
+    return {id:first.id,title,age:first.ageGroup,image:category?.image||CLASS_CATEGORIES[0].image,description:first.curriculum||category?.description||'',sessions};
+  });
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -138,6 +137,7 @@ const ClassesPage = () => {
       </div>
       
       <div className="max-w-7xl mx-auto px-4 py-8">
+        {loading&&<p role="status" className="mb-6 text-center">Loading current schedule…</p>}{error&&<p role="alert" className="mb-6 text-center text-red-700">{error}</p>}{!loading&&!error&&!CLASSES.length&&<p className="mb-6 text-center">No classes are currently published. Contact the studio for upcoming classes.</p>}
         {/* Toggle View */}
         <div className="flex justify-center mb-10">
           <div className="bg-white p-1 rounded-full shadow-sm border border-gray-200 inline-flex">
@@ -159,11 +159,11 @@ const ClassesPage = () => {
         {viewMode === 'list' ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
             {classTypes.map((cls, i) => (
-              <ClassCard key={i} {...cls} />
+              <ClassCard key={i} {...cls} locations={LOCATIONS} />
             ))}
           </div>
         ) : (
-          <CalendarView />
+          <CalendarView classes={CLASSES} locations={LOCATIONS} />
         )}
       </div>
     </div>
